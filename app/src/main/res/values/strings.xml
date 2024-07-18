@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">PC2</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="peanut_butter">Peanut Butter</string>
+    <string name="_9_99">9.99</string>
+    <string name="_80">80</string>
+    <string name="_999">999</string>
+    <string name="_99_99">99.99</string>
+    <string name="food">Food</string>
+</resources>

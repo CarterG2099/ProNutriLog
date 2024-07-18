@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.foods.DashboardFragment">
+
+
+    <Button
+        android:id="@+id/FoodButton"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_weight="2"
+        android:padding="0sp"
+        android:text="Food"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/CostPer50Button"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="0sp"
+        android:text="50g"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/CostPer1Button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/CostPer1Button"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="0sp"
+        android:text="1g"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/ServingCostButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/ServingCostButton"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="0sp"
+        android:text="Svg $"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/ServingsButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/ServingsButton"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="0sp"
+        android:text="#"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/GramsButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/GramsButton"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="0sp"
+        android:text="g"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/PriceButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/PriceButton"
+        android:layout_width="43dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="0sp"
+        android:text="Price"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/CalPercentButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/CalPercentButton"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="0sp"
+        android:text="%"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/deleteSelectedButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FoodButton"
+        tools:itemCount="30"
+        tools:listitem="@layout/item_protein_cost" />
+
+    <Button
+        android:id="@+id/deleteSelectedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/royal"
+        android:text="Delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/addFoodButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add +"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/deleteSelectedButton"
+        app:layout_constraintStart_toEndOf="@+id/editButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
