@@ -1,125 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:layout_margin="8dp"
+    app:cardElevation="4dp">
 
-    <androidx.cardview.widget.CardView
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#03A9F4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:cardCornerRadius="5dp">
+        android:columnCount="4"
+        android:rowCount="5"
+        android:padding="12dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Header -->
+        <TextView
+            android:id="@+id/MealRV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/item_selected_background">
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnSpan="4"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:paddingRight="8dp"/>
 
-            <!-- Food Source -->
-            <TextView
-                android:id="@+id/MealRV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/item_selected_background"
-                android:padding="5dp"
-                android:text="@string/peanut_butter"
-                android:textColor="#000000"
-                app:barrierMargin="@dimen/cardview_default_radius"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <!-- Column 1 Data -->
 
-            <!-- Cost Per 50 -->
-            <TextView
-                android:id="@+id/CostPer50RV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/item_selected_background"
-                android:padding="5dp"
-                android:text="@string/_9_99"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toStartOf="@+id/CostPer1RV"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/ServingsRV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:text="Servings: "
+            android:textSize="14sp"
+            android:paddingRight="8dp"/>
 
-            <!-- Cost Per 1 -->
-            <TextView
-                android:id="@+id/CostPer1RV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/item_selected_background"
-                android:padding="5dp"
-                android:text="@string/_9_99"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toStartOf="@+id/ServingCostRV"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/PriceRV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:text="Total $: "
+            android:textSize="14sp"
+            android:paddingRight="8dp"/>
 
-            <!-- Cost Per Serving -->
-            <TextView
-                android:id="@+id/ServingCostRV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/item_selected_background"
-                android:padding="5dp"
-                android:text="@string/_9_99"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toStartOf="@+id/ServingsRV"
-                app:layout_constraintTop_toTopOf="parent" />
+        <!-- Column 2 Costs -->
 
-            <!-- Servings -->
-            <TextView
-                android:id="@+id/ServingsRV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/item_selected_background"
-                android:padding="5dp"
-                android:text="@string/_80"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toStartOf="@+id/GramsRV"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/GramsRV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:text="Protein (g): "
+            android:textSize="14sp"
+            android:paddingRight="8dp"/>
 
-            <!-- Grams -->
-            <TextView
-                android:id="@+id/GramsRV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/item_selected_background"
-                android:padding="5dp"
-                android:text="@string/_999"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toStartOf="@+id/PriceRV"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/PercentRV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:text="Cals/Serving: "
+            android:textSize="14sp"
+            android:paddingRight="8dp"/>
 
-            <!-- Price -->
+        <TextView
+            android:id="@+id/CostPer50RV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:text="Cost/50g: "
+            android:textSize="14sp"
+            android:paddingRight="8dp"/>
 
-            <TextView
-                android:id="@+id/PriceRV"
-                android:layout_width="49dp"
-                android:layout_height="30dp"
-                android:background="@drawable/item_selected_background"
-                android:padding="5dp"
-                android:text="@string/_99_99"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toStartOf="@+id/PercentRV"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/CostPer1RV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:text="Cost/g: "
+            android:textSize="14sp"
+            android:paddingRight="8dp"/>
 
-            <TextView
-                android:id="@+id/PercentRV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/item_selected_background"
-                android:padding="5dp"
-                android:text="@string/_999"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/ServingCostRV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:text="Cost/Serving: "
+            android:textSize="14sp"
+            android:paddingRight="8dp" />
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </GridLayout>
+</com.google.android.material.card.MaterialCardView>

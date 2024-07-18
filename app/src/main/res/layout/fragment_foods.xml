@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.foods.DashboardFragment">
+    tools:context=".ui.foods.DashboardFragment"
+    >
 
+    <com.google
 
     <Button
         android:id="@+id/FoodButton"

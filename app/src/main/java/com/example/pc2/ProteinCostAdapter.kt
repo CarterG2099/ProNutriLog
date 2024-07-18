@@ -49,13 +49,13 @@ class ProteinCostAdapter(private var dataList: MutableList<ProteinCostData>) :
         }
 
         holder.foodSourceTextView.text = currentItem.foodSource
-        holder.costPer50TextView.text = currentItem.fiftyGrams
-        holder.costPer1TextView.text = currentItem.oneGram
-        holder.costPerServingTextView.text = currentItem.servingCost.toString()
-        holder.servingsTextView.text = currentItem.servings
-        holder.gramsTextView.text = currentItem.grams
-        holder.priceTextView.text = currentItem.price
-        holder.calTextView.text = currentItem.cal
+        holder.costPer50TextView.append(currentItem.fiftyGrams)
+        holder.costPer1TextView.append(currentItem.oneGram)
+        holder.costPerServingTextView.append(currentItem.servingCost.toString())
+        holder.servingsTextView.append(currentItem.servings)
+        holder.gramsTextView.append(currentItem.grams)
+        holder.priceTextView.append(currentItem.price)
+        holder.calTextView.append(currentItem.cal)
     }
 
     override fun getItemCount(): Int {
