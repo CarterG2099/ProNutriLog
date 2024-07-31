@@ -57,7 +57,7 @@ class DashboardFragment : Fragment(){
         binding.recyclerView.layoutManager = layoutManager
 
         // Set up ItemTouchHelper for swipe actions
-        setupItemTouchHelper()
+//        setupItemTouchHelper()
 
         return root
     }
@@ -153,7 +153,5 @@ class DashboardFragment : Fragment(){
         proteinCostAdapter.notifyDataSetChanged()
     }
 
-    @Composable
-    delete
 }
 
