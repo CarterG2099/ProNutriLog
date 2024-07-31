@@ -1,19 +1,13 @@
-import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pc2.ProteinCostAdapter
 import com.example.pc2.SharedViewModel
-
 
 @Composable
 fun EditItemDialog(
@@ -27,6 +21,17 @@ fun EditItemDialog(
     var grams by remember { mutableStateOf(selectedItem.grams) }
     var price by remember { mutableStateOf(selectedItem.price) }
     var calories by remember { mutableStateOf(selectedItem.calories) }
+    var showToastMessage by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+
+    // Show toast message when showToastMessage is not null
+    LaunchedEffect(showToastMessage) {
+        showToastMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            showToastMessage = null // Reset the message after showing
+        }
+    }
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Surface(
@@ -79,30 +84,30 @@ fun EditItemDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Button(onClick = {
-                        if (foodSource.isBlank() || servings.isBlank() || grams.isBlank() || price.isBlank() || calories.isBlank()) {
-                            Toast.makeText(LocalContext.current, "Incomplete Information", Toast.LENGTH_SHORT).show()
-                        } else {
-                            // Perform calculations and save data
-                            val calPercent = calcCalPercent(grams, calories)
-                            val unitCost = calcUnitCost(price, grams, servings)
-                            val costPer50 = calcCostPer50(price, grams, servings)
-                            saveData(
-                                sharedViewModel,
-                                proteinCostAdapter,
-                                foodSource,
-                                servings,
-                                grams,
-                                price,
-                                calPercent,
-                                unitCost,
-                                costPer50
-                            )
-                            onDismiss()
+                    SaveButton(
+                        onClick = {
+                            if (foodSource.isBlank() || servings.isBlank() || grams.isBlank() || price.isBlank() || calories.isBlank()) {
+                                showToastMessage = "Incomplete Information"
+                            } else {
+                                val calPercent = calcCalPercent(grams, calories)
+                                val unitCost = calcUnitCost(price, grams, servings)
+                                val costPer50 = calcCostPer50(price, grams, servings)
+                                saveData(
+                                    context,
+                                    sharedViewModel,
+                                    proteinCostAdapter,
+                                    foodSource,
+                                    servings,
+                                    grams,
+                                    price,
+                                    calPercent,
+                                    unitCost,
+                                    costPer50
+                                )
+                                onDismiss()
+                            }
                         }
-                    }) {
-                        Text("Save")
-                    }
+                    )
 
                     Button(onClick = { onDismiss() }) {
                         Text("Cancel")
@@ -113,6 +118,14 @@ fun EditItemDialog(
     }
 }
 
+@Composable
+fun SaveButton(onClick: () -> Unit) {
+    Button(onClick = onClick) {
+        Text("Save")
+    }
+}
+
+// Non-composable logic functions
 private fun calcCalPercent(grams: String, calories: String): Double {
     val g = grams.toDoubleOrNull() ?: 0.0
     val cal = calories.toDoubleOrNull() ?: 0.0
@@ -133,8 +146,8 @@ private fun calcCostPer50(price: String, grams: String, servings: String): Doubl
     return if (g * s != 0.0) (p / (g * s)) * 50 else 0.0
 }
 
-@Composable
 private fun saveData(
+    context: android.content.Context,
     sharedViewModel: SharedViewModel,
     proteinCostAdapter: ProteinCostAdapter,
     foodSource: String,
@@ -145,19 +158,7 @@ private fun saveData(
     unitCost: Double,
     costPer50: Double
 ) {
-    // Assuming `selectedItem` is passed as an argument or accessed from ViewModel
-    // Replace `selectedItem` with the correct item if needed
-//    val selectedItem = ProteinCostData() // Replace with actual data
-//    selectedItem.foodSource = foodSource
-//    selectedItem.servings = servings
-//    selectedItem.grams = grams
-//    selectedItem.price = price
-//    selectedItem.cal = String.format("%.0f", calPercent)
-//    selectedItem.oneGram = String.format("%.2f", unitCost)
-//    selectedItem.fiftyGrams = String.format("%.2f", costPer50)
-//    selectedItem.servingCost = String.format("%.2f", price.toDoubleOrNull()?.div(servings.toDoubleOrNull()!!) ?: 0.0)
-
     // Save data to ViewModel or SharedPreferences
-    sharedViewModel.replaceDataToSharedPreferences(LocalContext.current, sharedViewModel.proteinCostList)
+    sharedViewModel.replaceDataToSharedPreferences(context, sharedViewModel.proteinCostList)
     proteinCostAdapter.notifyDataSetChanged()
 }
