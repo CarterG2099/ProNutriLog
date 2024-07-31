@@ -4,12 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.foods.DashboardFragment"
-    >
+    tools:context=".ui.foods.DashboardFragment">
 
-    <com.google
-
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/FoodButton"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -22,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/CostPer50Button"
         android:layout_width="35dp"
         android:layout_height="0dp"
@@ -34,7 +31,7 @@
         app:layout_constraintEnd_toStartOf="@+id/CostPer1Button"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/CostPer1Button"
         android:layout_width="35dp"
         android:layout_height="0dp"
@@ -46,7 +43,7 @@
         app:layout_constraintEnd_toStartOf="@+id/ServingCostButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/ServingCostButton"
         android:layout_width="35dp"
         android:layout_height="0dp"
@@ -58,7 +55,7 @@
         app:layout_constraintEnd_toStartOf="@+id/ServingsButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/ServingsButton"
         android:layout_width="20dp"
         android:layout_height="0dp"
@@ -70,7 +67,7 @@
         app:layout_constraintEnd_toStartOf="@+id/GramsButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/GramsButton"
         android:layout_width="20dp"
         android:layout_height="0dp"
@@ -82,7 +79,7 @@
         app:layout_constraintEnd_toStartOf="@+id/PriceButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/PriceButton"
         android:layout_width="43dp"
         android:layout_height="0dp"
@@ -94,8 +91,7 @@
         app:layout_constraintEnd_toStartOf="@+id/CalPercentButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/CalPercentButton"
         android:layout_width="35dp"
         android:layout_height="0dp"
@@ -118,7 +114,7 @@
         tools:itemCount="30"
         tools:listitem="@layout/item_protein_cost" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/deleteSelectedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -128,7 +124,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/editButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -137,7 +133,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/addFoodButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

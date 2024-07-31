@@ -9,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.compose.runtime.Composable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pc2.EditItemDialogFragment
@@ -53,6 +55,9 @@ class DashboardFragment : Fragment(){
         // Set up GridLayoutManager with 2 columns
         val layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = layoutManager
+
+        // Set up ItemTouchHelper for swipe actions
+        setupItemTouchHelper()
 
         return root
     }
@@ -134,8 +139,6 @@ class DashboardFragment : Fragment(){
             }
     }
 
-
-
     private fun handleSortClick(buttonId: Int) {
         when (buttonId) {
             R.id.FoodButton -> sharedViewModel.foodSort()
@@ -149,4 +152,8 @@ class DashboardFragment : Fragment(){
         }
         proteinCostAdapter.notifyDataSetChanged()
     }
+
+    @Composable
+    delete
 }
+

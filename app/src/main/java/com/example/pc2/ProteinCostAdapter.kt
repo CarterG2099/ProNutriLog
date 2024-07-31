@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ProteinCostAdapter(private var dataList: MutableList<ProteinCostData>) :
     RecyclerView.Adapter<ProteinCostAdapter.ViewHolder>() {
     private val TAG = "ProteinCostAdapter"
-    private lateinit var proteinCostAdapter: ProteinCostAdapter // Add this property
+    private lateinit var proteinCostAdapter: ProteinCostAdapter
 
 
 
@@ -62,6 +62,10 @@ class ProteinCostAdapter(private var dataList: MutableList<ProteinCostData>) :
         return dataList.size
     }
 
+    fun removeItem(position: Int) {
+        dataList.removeAt(position)
+        notifyItemRemoved(position)
+    }
 
     fun updateData(newDataList: MutableList<ProteinCostData>) {
         Log.d(TAG, "Called updateData" )
