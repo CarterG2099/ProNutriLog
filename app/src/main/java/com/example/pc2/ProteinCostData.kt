@@ -1,13 +1,13 @@
 data class ProteinCostData(
-    val foodSource: String,
-    val servings: Double,
-    val grams: Double,
-    val price: Double,
-    val fiftyGrams: String,
-    val oneGram: String,
-    val cal: Double,
-    val calories: String,
-    val isSelected: Boolean = false
+    var foodSource: String,
+    var servings: Double,
+    var grams: Double,
+    var price: Double,
+    var fiftyGrams: String,
+    var oneGram: String,
+    var cal: Double,
+    var calories: String,
+    var isSelected: Boolean = false
 ) {
     // Calculate the serving cost based on servings and price
     val servingCost: String

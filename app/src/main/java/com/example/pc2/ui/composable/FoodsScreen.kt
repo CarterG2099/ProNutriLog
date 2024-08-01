@@ -1,6 +1,5 @@
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +27,14 @@ fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
         viewModel.loadSavedData(context)
     }
 
+    val handleDelete: (ProteinCostData) -> Unit = { itemToDelete ->
+        // Create a mutable copy of the list and remove the item
+        val updatedList = proteinCostList.toMutableList()
+        updatedList.remove(itemToDelete)
+
+        // Save the updated list back to SharedPreferences
+        viewModel.updateFoodItem(context, itemToDelete, true)
+    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -39,6 +46,9 @@ fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
 
         // Define constraints
         val topGuideline = createGuidelineFromTop(0.1f)
+
+        ProteinCostList(foodItems = proteinCostList, handleDelete)
+
 
         // Food Button
         Button(
@@ -145,20 +155,20 @@ fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
             Text("%")
         }
 
-        // RecyclerView (use LazyColumn or LazyRow in Compose)
-        LazyColumn(
-            modifier = Modifier.constrainAs(recyclerView) {
-                top.linkTo(foodButton.bottom, margin = 16.dp)
-                bottom.linkTo(deleteSelectedButton.top, margin = 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        ) {
-            items(proteinCostList) { item ->
-                Text("Food: ${item.foodSource}, Cost: ${item.price}")
-//                    modifier = Modifier.padding(8.dp)
-            }
-        }
+//        // LazyColumn to display the list of ProteinCostData items
+//        LazyColumn(
+//            modifier = Modifier
+//                .constrainAs(recyclerView) {
+//                    top.linkTo(foodButton.bottom, margin = 16.dp)
+//                    bottom.linkTo(deleteSelectedButton.top, margin = 16.dp)
+//                    start.linkTo(parent.start)
+//                    end.linkTo(parent.end)
+//                }
+//                .padding(8.dp)
+//        ) {
+//
+//            }
+//        }
 
         // Delete Selected Button
         Button(

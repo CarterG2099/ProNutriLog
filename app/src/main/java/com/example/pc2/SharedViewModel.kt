@@ -2,7 +2,6 @@ package com.example.pc2
 
 import ProteinCostData
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,7 +21,7 @@ class SharedViewModel : ViewModel() {
     val proteinCostLiveData: LiveData<List<ProteinCostData>> get() = _proteinCostLiveData
 
     // Function to save or update food items in SharedPreferences
-    fun saveOrUpdateFoodItem(context: Context, newItem: ProteinCostData) {
+    fun updateFoodItem(context: Context, newItem: ProteinCostData, delete: Boolean) {
         // Retrieve the existing items from SharedPreferences
         val sharedPrefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val json = sharedPrefs.getString("proteinCostList", null)
@@ -37,8 +36,11 @@ class SharedViewModel : ViewModel() {
             mutableListOf()
         }
 
-        // Append the new item to the existing list
-        existingItems.add(newItem)
+        // Append or delete the new item to the existing list
+        if(delete)
+            existingItems.remove(newItem)
+        else
+            existingItems.add(newItem)
 
         // Serialize the updated list to JSON
         val updatedJson = Gson().toJson(existingItems, type)
@@ -78,6 +80,37 @@ class SharedViewModel : ViewModel() {
     private fun updateProteinCostList(newData: List<ProteinCostData>) {
         _proteinCostLiveData.value = newData
     }
+
+//    fun removeFoodItem(context: Context, itemToRemove: ProteinCostData) {
+//        // Retrieve the existing items from SharedPreferences
+//        val sharedPrefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+//        val json = sharedPrefs.getString("proteinCostList", null)
+//        val type = object : TypeToken<List<ProteinCostData>>() {}.type
+//
+//        // Deserialize JSON to List<ProteinCostData> or create an empty list if no data
+//        val existingItems: MutableList<ProteinCostData> = if (json != null) {
+//            Gson().fromJson(json, type)
+//        } else {
+//            mutableListOf()
+//        }
+//
+//        // Remove the specified item from the list
+//        existingItems.remove(itemToRemove)
+//
+//        // Serialize the updated list to JSON
+//        val updatedJson = Gson().toJson(existingItems, type)
+//
+//        // Save the updated list back to SharedPreferences
+//        with(sharedPrefs.edit()) {
+//            putString("proteinCostList", updatedJson)
+//            apply()
+//        }
+//
+//        // Update the LiveData with the new list
+//        _proteinCostLiveData.value = existingItems
+//    }
+
+
 
 //    // Define a map to store the ascending flags for each sorting function
 //    private val sortAscendingFlags = mutableMapOf(

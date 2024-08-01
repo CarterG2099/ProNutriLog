@@ -73,7 +73,7 @@ fun HomeScreen() {
 //            viewModel.saveFoodItems(context, foodItems)
 //            viewModel.updateDataToSharedPreferences(context, foodItems)
 
-            viewModel.saveOrUpdateFoodItem(context, item)
+            viewModel.updateFoodItem(context, item, false)
             Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
 //            clearFields()
         }
