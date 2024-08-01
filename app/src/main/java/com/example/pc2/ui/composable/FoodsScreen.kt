@@ -1,14 +1,34 @@
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.pc2.SharedViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
+
+@Preview(showBackground = true)
 @Composable
-fun Foods() {
+fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
+
+    val proteinCostList by viewModel.proteinCostLiveData.observeAsState(emptyList())
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.loadSavedData(context)
+    }
+
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -134,8 +154,9 @@ fun Foods() {
                 end.linkTo(parent.end)
             }
         ) {
-            items(30) { index -> // Dummy data for illustration
-                Text("Item $index")
+            items(proteinCostList) { item ->
+                Text("Food: ${item.foodSource}, Cost: ${item.price}")
+//                    modifier = Modifier.padding(8.dp)
             }
         }
 

@@ -1,13 +1,106 @@
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pc2.SharedViewModel
+
 
 @Composable
-fun HomeLayout() {
+fun HomeScreen() {
+
+    // Create or get the SharedViewModel instance
+    val viewModel: SharedViewModel = viewModel()
+    val context = LocalContext.current
+
+
+    // Define state for each text field
+    var foodText by remember { mutableStateOf("") }
+    var servingsText by remember { mutableStateOf("") }
+    var gramsText by remember { mutableStateOf("") }
+    var priceText by remember { mutableStateOf("") }
+    var caloriesText by remember { mutableStateOf("") }
+    var costPer50 by remember { mutableStateOf("50g: ") }
+    var unitCost by remember { mutableStateOf("1g: ") }
+    var proteinCostList by remember { mutableStateOf(mutableListOf<ProteinCostData>()) }
+
+
+    // Function to clear all fields
+    fun clearFields() {
+        foodText = ""
+        servingsText = ""
+        gramsText = ""
+        priceText = ""
+        caloriesText = ""
+        costPer50 = ""
+        unitCost = ""
+    }
+
+    fun saveItem() {
+        val servings = servingsText.toDoubleOrNull() ?: 0.0
+        val grams = gramsText.toDoubleOrNull() ?: 0.0
+        val price = priceText.toDoubleOrNull() ?: 0.0
+        val calories = caloriesText.toDoubleOrNull() ?: 0.0
+
+        if (servings > 0 && grams > 0 && price > 0 && calories > 0) {
+            val fiftyGramsCost = String.format("%.2f", (price / (grams * servings)) * 50)
+            val oneGramCost = String.format("%.2f", (price / (grams * servings)) * 100)
+
+            val item = ProteinCostData(
+                foodSource = foodText,
+                servings = servings,
+                grams = grams,
+                price = price,
+                fiftyGrams = fiftyGramsCost,
+                oneGram = oneGramCost,
+                cal = calories,
+                calories = String.format("%.2f", ((grams * 4) / calories) * 100),
+                isSelected = false
+            )
+
+//            viewModel.loadSavedData()
+//            proteinCostList.add(item)
+//            viewModel.updateProteinCostList(foodItems)
+//            viewModel.saveFoodItems(context, foodItems)
+//            viewModel.updateDataToSharedPreferences(context, foodItems)
+
+            viewModel.saveOrUpdateFoodItem(context, item)
+            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+//            clearFields()
+        }
+    }
+
+    fun calculate() {
+        val servings = servingsText.toDoubleOrNull() ?: 0.0
+        val grams = gramsText.toDoubleOrNull() ?: 0.0
+        val price = priceText.toDoubleOrNull() ?: 0.0
+        val calories = caloriesText.toDoubleOrNull() ?: 0.0
+
+        // Check for invalid input
+        if (servings == 0.0 || grams == 0.0 || price == 0.0 || calories == 0.0) {
+            costPer50 = ""
+            unitCost = "Please Provide Valid Information"
+            return
+        }
+
+        // Perform calculations
+        val unitCostValue = (price / (grams * servings)) * 100
+        val costPer50Value = (price / (grams * servings)) * 50
+
+        // Format results
+        costPer50 = "50g: $" + String.format("%.2f", costPer50Value)
+        unitCost = "1g: " + String.format("%.2f", unitCostValue) + " Cents"
+    }
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -21,8 +114,8 @@ fun HomeLayout() {
 
         // Food EditText
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = foodText,
+            onValueChange = {foodText = it},
             label = { Text("Food") },
             modifier = Modifier.constrainAs(foodDisplay) {
                 top.linkTo(topGuideline)
@@ -35,8 +128,8 @@ fun HomeLayout() {
 
         // Servings EditText
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = servingsText,
+            onValueChange = {servingsText =  it},
             label = { Text("Servings") },
             modifier = Modifier.constrainAs(servingsDisplay) {
                 top.linkTo(foodDisplay.bottom, margin = 16.dp)
@@ -49,8 +142,8 @@ fun HomeLayout() {
 
         // Grams EditText
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = gramsText,
+            onValueChange = {gramsText = it},
             label = { Text("Grams") },
             modifier = Modifier.constrainAs(gramsDisplay) {
                 top.linkTo(servingsDisplay.bottom, margin = 16.dp)
@@ -63,8 +156,8 @@ fun HomeLayout() {
 
         // Price EditText
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = priceText,
+            onValueChange = {priceText = it},
             label = { Text("Price") },
             modifier = Modifier.constrainAs(priceDisplay) {
                 top.linkTo(gramsDisplay.bottom, margin = 16.dp)
@@ -77,8 +170,8 @@ fun HomeLayout() {
 
         // Calories EditText
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = caloriesText,
+            onValueChange = {caloriesText = it},
             label = { Text("Calories") },
             modifier = Modifier.constrainAs(caloriesDisplay) {
                 top.linkTo(priceDisplay.bottom, margin = 16.dp)
@@ -91,7 +184,7 @@ fun HomeLayout() {
 
         // Cost Per 50 TextView
         Text(
-            text = "50g:",
+            text = costPer50,
             modifier = Modifier.constrainAs(costPer50Display) {
                 top.linkTo(caloriesDisplay.bottom, margin = 16.dp)
                 start.linkTo(parent.start)
@@ -104,7 +197,7 @@ fun HomeLayout() {
 
         // Unit Cost TextView
         Text(
-            text = "1g:",
+            text = unitCost,
             modifier = Modifier.constrainAs(unitCostDisplay) {
                 top.linkTo(costPer50Display.bottom, margin = 16.dp)
                 start.linkTo(parent.start)
@@ -117,7 +210,7 @@ fun HomeLayout() {
 
         // Save Button
         Button(
-            onClick = {},
+            onClick = { saveItem() },
             modifier = Modifier.constrainAs(saveButton) {
                 bottom.linkTo(parent.bottom, margin = 32.dp)
                 start.linkTo(parent.start)
@@ -128,7 +221,7 @@ fun HomeLayout() {
 
         // Calculate Button
         Button(
-            onClick = {},
+            onClick = { calculate() },
             modifier = Modifier.constrainAs(calcButton) {
                 bottom.linkTo(parent.bottom, margin = 32.dp)
                 start.linkTo(saveButton.end, margin = 16.dp)
@@ -140,7 +233,7 @@ fun HomeLayout() {
 
         // Clear Button
         Button(
-            onClick = {},
+            onClick = { clearFields() },
             modifier = Modifier.constrainAs(clearButton) {
                 bottom.linkTo(parent.bottom, margin = 32.dp)
                 end.linkTo(parent.end)
@@ -149,4 +242,7 @@ fun HomeLayout() {
             Text("Clear")
         }
     }
+
+
 }
+

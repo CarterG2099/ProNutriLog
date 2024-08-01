@@ -7,7 +7,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 
 @Composable
-fun MealsLayout() {
+fun MealsScreen() {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
