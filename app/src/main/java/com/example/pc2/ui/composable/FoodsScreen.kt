@@ -145,18 +145,19 @@ fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
             Text("%")
         }
 
-        // RecyclerView (use LazyColumn or LazyRow in Compose)
+        // LazyColumn to display the list of ProteinCostData items
         LazyColumn(
-            modifier = Modifier.constrainAs(recyclerView) {
-                top.linkTo(foodButton.bottom, margin = 16.dp)
-                bottom.linkTo(deleteSelectedButton.top, margin = 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier
+                .constrainAs(recyclerView) {
+                    top.linkTo(foodButton.bottom, margin = 16.dp)
+                    bottom.linkTo(deleteSelectedButton.top, margin = 16.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(8.dp)
         ) {
             items(proteinCostList) { item ->
-                Text("Food: ${item.foodSource}, Cost: ${item.price}")
-//                    modifier = Modifier.padding(8.dp)
+                ProteinCostCard(foodItem = item)
             }
         }
 
