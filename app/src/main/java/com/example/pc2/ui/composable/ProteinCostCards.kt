@@ -37,16 +37,15 @@ fun ProteinCostCard(
             .padding(8.dp)
     ) {
         if (offsetX < -threshold) {
-            IconButton(
-                onClick = { onDelete(foodItem) },
-                modifier = Modifier.align(Alignment.CenterStart)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "Delete",
-                    tint = Color.White
-                )
-            }
+            Icon(
+                imageVector = Icons.Filled.Delete,
+                contentDescription = "Delete",
+                tint = Color.White,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .background(Color.Red) // Optional: background color for the delete icon
+                    .padding(16.dp)
+            )
         }
 
         Card(
@@ -57,10 +56,10 @@ fun ProteinCostCard(
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures(
                         onDragEnd = {
-                            if (abs(offsetX) > threshold) {
-                                onDelete(foodItem)
+                            // Reset offset if not beyond threshold
+                            if (abs(offsetX) <= threshold) {
+                                offsetX = 0f
                             }
-                            offsetX = 0f
                         },
                         onHorizontalDrag = { change, dragAmount ->
                             change.consume()
@@ -94,6 +93,24 @@ fun ProteinCostCard(
                         Text("Cost/Serving: ${foodItem.servingCost}", fontSize = 14.sp)
                     }
                 }
+            }
+        }
+
+        // Show delete icon if swipe offset is beyond threshold
+        if (offsetX < -threshold) {
+            IconButton(
+                onClick = { onDelete(foodItem) },
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .background(Color.Red) // Optional: background color for visibility
+                    .padding(16.dp)
+                    .offset { IntOffset(x = -animatedOffsetX.toInt(), y = 0) } // Align with card
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Delete",
+                    tint = Color.White
+                )
             }
         }
     }
