@@ -1,4 +1,5 @@
 data class ProteinCostData(
+    var id: String,
     var foodSource: String,
     var servings: Double,
     var grams: Double,

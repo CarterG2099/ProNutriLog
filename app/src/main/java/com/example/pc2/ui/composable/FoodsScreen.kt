@@ -1,10 +1,19 @@
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -15,6 +24,7 @@ import com.example.pc2.SharedViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
@@ -22,6 +32,9 @@ fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
     val proteinCostList by viewModel.proteinCostLiveData.observeAsState(emptyList())
 
     val context = LocalContext.current
+    var selectedItem by remember { mutableStateOf<ProteinCostData?>(null) }
+    var isEditDialogVisible by remember { mutableStateOf(false) }
+    var searchText by remember {mutableStateOf("")}
 
     LaunchedEffect(Unit) {
         viewModel.loadSavedData(context)
@@ -30,10 +43,21 @@ fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
     val handleDelete: (ProteinCostData) -> Unit = { itemToDelete ->
         // Create a mutable copy of the list and remove the item
         val updatedList = proteinCostList.toMutableList()
+        Log.d("FoodsScreen", "Item to delete: $itemToDelete")
         updatedList.remove(itemToDelete)
 
         // Save the updated list back to SharedPreferences
-        viewModel.updateFoodItem(context, itemToDelete, true)
+        viewModel.updateFoodItem(context, itemToDelete, false)
+    }
+
+    val handleEdit: (ProteinCostData) -> Unit = { itemToEdit ->
+        selectedItem = itemToEdit
+        isEditDialogVisible = true
+    }
+
+    val handleSave: (ProteinCostData) -> Unit = { updatedItem ->
+        // Update SharedPreferences with the new data
+        viewModel.updateFoodItem(context, updatedItem, true)
     }
 
     ConstraintLayout(
@@ -42,13 +66,35 @@ fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
             .padding(16.dp)
     ) {
         // Create references for the UI elements
-        val (foodButton, costPer50Button, costPer1Button, servingCostButton, servingsButton, gramsButton, priceButton, calPercentButton, recyclerView, deleteSelectedButton, editButton, addFoodButton) = createRefs()
+        val (searchBar, foodButton, costPer50Button, costPer1Button, servingCostButton, servingsButton, gramsButton, priceButton, calPercentButton, recyclerView) = createRefs()
 
         // Define constraints
         val topGuideline = createGuidelineFromTop(0.1f)
 
-        ProteinCostList(foodItems = proteinCostList, handleDelete)
-
+        // Search Bar
+        SearchBar(
+            query = searchText,
+            onQueryChange = {
+                searchText = it},
+            onSearch = {},
+            active = false,
+            onActiveChange = {},
+            placeholder = { Text("Search") },
+            trailingIcon = {
+                Icon(
+                    modifier = Modifier.clickable {
+                        searchText = ""
+                    },
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Close Icon"
+                )
+            },
+            leadingIcon = {
+                Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
+            }
+        ) {
+            Text("Search")
+        }
 
         // Food Button
         Button(
@@ -155,53 +201,49 @@ fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
             Text("%")
         }
 
-//        // LazyColumn to display the list of ProteinCostData items
-//        LazyColumn(
-//            modifier = Modifier
-//                .constrainAs(recyclerView) {
-//                    top.linkTo(foodButton.bottom, margin = 16.dp)
-//                    bottom.linkTo(deleteSelectedButton.top, margin = 16.dp)
-//                    start.linkTo(parent.start)
-//                    end.linkTo(parent.end)
-//                }
-//                .padding(8.dp)
-//        ) {
-//
-//            }
-//        }
-
-        // Delete Selected Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(deleteSelectedButton) {
-                bottom.linkTo(parent.bottom)
-                end.linkTo(parent.end)
-            }
+        // LazyColumn to display the list of ProteinCostData items
+        LazyColumn(
+            modifier = Modifier
+                .constrainAs(recyclerView) {
+                    top.linkTo(foodButton.bottom, margin = 16.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(8.dp)
         ) {
-            Text("Delete")
+            items(proteinCostList) { item ->
+                ProteinCostItem(foodItem = item, onDelete = handleDelete, onEdit = handleEdit)
+            }
         }
+    }
 
-        // Edit Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(editButton) {
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-            }
-        ) {
-            Text("Edit")
-        }
-
-        // Add Food Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(addFoodButton) {
-                bottom.linkTo(parent.bottom)
-                end.linkTo(deleteSelectedButton.start, margin = 8.dp)
-                start.linkTo(editButton.end, margin = 8.dp)
-            }
-        ) {
-            Text("Add +")
+    // Show EditScreen as a dialog
+    selectedItem?.let { item ->
+        if (isEditDialogVisible) {
+            AlertDialog(
+                onDismissRequest = { isEditDialogVisible = false },
+                title = { Text("Edit ${item.foodSource}") },
+                text = {
+                    EditScreen(
+                        foodItem = item,
+                        onDismiss = { isEditDialogVisible = false },
+                        onSave = { updatedItem ->
+                            handleSave(updatedItem)
+                            isEditDialogVisible = false
+                    }
+                )
+                },
+                confirmButton = {
+                    Button(onClick = { isEditDialogVisible = false }) {
+                        Text("Save")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = { isEditDialogVisible = false }) {
+                        Text("Close")
+                    }
+                }
+            )
         }
     }
 }

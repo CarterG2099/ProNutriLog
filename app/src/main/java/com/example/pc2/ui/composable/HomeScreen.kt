@@ -13,6 +13,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pc2.SharedViewModel
+import java.util.UUID
 
 
 @Composable
@@ -56,6 +57,7 @@ fun HomeScreen() {
             val oneGramCost = String.format("%.2f", (price / (grams * servings)) * 100)
 
             val item = ProteinCostData(
+                id = UUID.randomUUID().toString(),
                 foodSource = foodText,
                 servings = servings,
                 grams = grams,
@@ -64,7 +66,7 @@ fun HomeScreen() {
                 oneGram = oneGramCost,
                 cal = calories,
                 calories = String.format("%.2f", ((grams * 4) / calories) * 100),
-                isSelected = false
+                isSelected = false,
             )
 
 //            viewModel.loadSavedData()
@@ -74,7 +76,7 @@ fun HomeScreen() {
 //            viewModel.updateDataToSharedPreferences(context, foodItems)
 
             viewModel.updateFoodItem(context, item, false)
-            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Saved ${item.foodSource}", Toast.LENGTH_SHORT).show()
 //            clearFields()
         }
     }

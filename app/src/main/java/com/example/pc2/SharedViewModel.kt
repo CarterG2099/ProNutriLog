@@ -2,6 +2,7 @@ package com.example.pc2
 
 import ProteinCostData
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +22,8 @@ class SharedViewModel : ViewModel() {
     val proteinCostLiveData: LiveData<List<ProteinCostData>> get() = _proteinCostLiveData
 
     // Function to save or update food items in SharedPreferences
-    fun updateFoodItem(context: Context, newItem: ProteinCostData, delete: Boolean) {
+    fun updateFoodItem(context: Context, newItem: ProteinCostData, edit: Boolean) {
+        Log.d("SharedViewModel", "newItem: $newItem")
         // Retrieve the existing items from SharedPreferences
         val sharedPrefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val json = sharedPrefs.getString("proteinCostList", null)
@@ -36,11 +38,21 @@ class SharedViewModel : ViewModel() {
             mutableListOf()
         }
 
-        // Append or delete the new item to the existing list
-        if(delete)
-            existingItems.remove(newItem)
-        else
-            existingItems.add(newItem)
+        // Determine whether to update, add, or remove the item
+        if (edit) {
+            val index = existingItems.indexOfFirst { it.id == newItem.id }
+            if (index != -1) {
+                existingItems[index] = newItem
+            }
+        } else {
+            val index = existingItems.indexOfFirst { it.id == newItem.id }
+            if (index != -1) {
+                existingItems.removeAt(index)
+            } else {
+                existingItems.add(newItem)
+            }
+        }
+
 
         // Serialize the updated list to JSON
         val updatedJson = Gson().toJson(existingItems, type)

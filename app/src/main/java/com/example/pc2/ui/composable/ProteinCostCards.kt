@@ -1,6 +1,6 @@
-import androidx.compose.animation.core.animateFloatAsState
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,64 +9,79 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.Modifier import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import kotlin.math.abs
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
+import com.example.pc2.R
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue.EndToStart
+import androidx.compose.material3.SwipeToDismissBoxValue.Settled
+import androidx.compose.material3.SwipeToDismissBoxValue.StartToEnd
+import androidx.compose.material3.rememberSwipeToDismissBoxState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProteinCostItem(
+    foodItem: ProteinCostData,
+    modifier: Modifier = Modifier,
+    onDelete: (ProteinCostData) -> Unit,
+    onEdit: (ProteinCostData) -> Unit
+) {
+    val TAG = "ProteinCostCard"
+    val context = LocalContext.current
+    val currentItem by rememberUpdatedState(foodItem)
+
+    val dismissState = rememberSwipeToDismissBoxState(
+        confirmValueChange = {
+            when(it) {
+                StartToEnd -> {
+                    onDelete(currentItem)
+                    Toast.makeText(context, "Deleted ${currentItem.foodSource}", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "Deleted item: $currentItem")
+                    true
+                }
+                EndToStart -> {
+                    onEdit(currentItem)
+                    true
+                }
+                Settled -> {
+                    false
+                }
+            }
+            return@rememberSwipeToDismissBoxState false
+        },
+        positionalThreshold = { it * .75f }
+    )
+    Log.d(TAG, "SwipeToDismissBox called: $currentItem")
+
+    SwipeToDismissBox(
+        state = dismissState,
+        modifier = modifier,
+        backgroundContent = { DismissBackground(dismissState) },
+        content = {
+            ProteinCostCard(currentItem)
+        })
+}
 
 @Composable
-fun ProteinCostCard(
-    foodItem: ProteinCostData,
-    onDelete: (ProteinCostData) -> Unit
-) {
-    var offsetX by remember { mutableStateOf(0f) }
-    val animatedOffsetX by animateFloatAsState(targetValue = offsetX)
-    val threshold = 150f // threshold for a successful swipe
-
+fun ProteinCostCard(foodItem: ProteinCostData) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
     ) {
-        if (offsetX < -threshold) {
-            Icon(
-                imageVector = Icons.Filled.Delete,
-                contentDescription = "Delete",
-                tint = Color.White,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .background(Color.Red) // Optional: background color for the delete icon
-                    .padding(16.dp)
-            )
-        }
-
         Card(
             modifier = Modifier
-                .offset { IntOffset(x = animatedOffsetX.toInt(), y = 0) } // Convert to IntOffset
                 .fillMaxWidth()
-                .padding(8.dp)
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures(
-                        onDragEnd = {
-                            // Reset offset if not beyond threshold
-                            if (abs(offsetX) <= threshold) {
-                                offsetX = 0f
-                            }
-                        },
-                        onHorizontalDrag = { change, dragAmount ->
-                            change.consume()
-                            offsetX += dragAmount
-                        }
-                    )
-                },
+                .padding(8.dp),
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
             Column(modifier = Modifier.padding(12.dp)) {
@@ -95,33 +110,6 @@ fun ProteinCostCard(
                 }
             }
         }
-
-        // Show delete icon if swipe offset is beyond threshold
-        if (offsetX < -threshold) {
-            IconButton(
-                onClick = { onDelete(foodItem) },
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .background(Color.Red) // Optional: background color for visibility
-                    .padding(16.dp)
-                    .offset { IntOffset(x = -animatedOffsetX.toInt(), y = 0) } // Align with card
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "Delete",
-                    tint = Color.White
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ProteinCostList(foodItems: List<ProteinCostData>, onDelete: (ProteinCostData) -> Unit) {
-    LazyColumn {
-        items(foodItems) { item ->
-            ProteinCostCard(foodItem = item, onDelete = onDelete)
-        }
     }
 }
 
@@ -131,6 +119,7 @@ fun PreviewProteinCostList() {
     // Provide a list of sample data for the preview
     val sampleFoodItems = listOf(
         ProteinCostData(
+            id = "1",
             foodSource = "Chicken Breast",
             servings = 200.0,
             grams = 150.0,
@@ -141,6 +130,7 @@ fun PreviewProteinCostList() {
             calories = "80"
         ),
         ProteinCostData(
+            id = "2",
             foodSource = "Salmon",
             servings = 150.0,
             grams = 200.0,
@@ -154,10 +144,46 @@ fun PreviewProteinCostList() {
 
     var items by remember { mutableStateOf(sampleFoodItems) }
 
-    ProteinCostList(
-        foodItems = items,
-        onDelete = { item ->
-            items = items.filterNot { it == item }
+
+    // LazyColumn to display the list of ProteinCostData items
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+        items(items) { item ->
+            val handleDelete: (ProteinCostData) -> Unit = { /* Handle delete action */ }
+            ProteinCostItem(foodItem = item, onDelete = handleDelete, onEdit = {})
         }
-    )
+    }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DismissBackground(dismissState: SwipeToDismissBoxState) {
+    val color = when (dismissState.dismissDirection) {
+        SwipeToDismissBoxValue.StartToEnd -> Color(0xFFFF1744)
+        SwipeToDismissBoxValue.EndToStart -> Color(0xFF1DE9B6)
+        SwipeToDismissBoxValue.Settled -> Color.Transparent
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color)
+            .padding(24.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Icon(
+            Icons.Default.Delete,
+            contentDescription = "Delete"
+        )
+        Spacer(modifier = Modifier)
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_archive_24),
+            contentDescription = "Edi"
+        )
+    }
+}
+
