@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.pc2.SharedViewModel
+import com.example.pc2.ProteinCostViewModel
 import java.util.UUID
 
 
@@ -24,7 +24,7 @@ import java.util.UUID
 fun HomeScreen() {
 
     // Create or get the SharedViewModel instance
-    val viewModel: SharedViewModel = viewModel()
+    val viewModel: ProteinCostViewModel = viewModel()
     val context = LocalContext.current
 
 

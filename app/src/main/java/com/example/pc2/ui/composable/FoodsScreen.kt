@@ -27,13 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.pc2.SharedViewModel
+import com.example.pc2.ProteinCostViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun FoodsScreen(viewModel: SharedViewModel = viewModel()) {
+fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
 
     val proteinCostList by viewModel.proteinCostLiveData.observeAsState(emptyList())
 

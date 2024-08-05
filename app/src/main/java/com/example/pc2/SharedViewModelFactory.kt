@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 
 class SharedViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SharedViewModel::class.java)) {
-            return SharedViewModel() as T
+        if (modelClass.isAssignableFrom(ProteinCostViewModel::class.java)) {
+            return ProteinCostViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

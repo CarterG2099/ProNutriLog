@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SharedViewModel : ViewModel() {
+class ProteinCostViewModel : ViewModel() {
     private val TAG = "ViewModel" //Debugging Tag
 
 //    // Define a LiveData for the list of ProteinCostData
