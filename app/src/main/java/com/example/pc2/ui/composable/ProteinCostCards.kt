@@ -115,11 +115,12 @@ fun ProteinCostCard(foodItem: ProteinCostData) {
                     }
                     Column(modifier = Modifier.weight(1f)) {
                         Text("Protein (g): ${foodItem.grams}", fontSize = 14.sp)
-                        Text("Cals/Serving: ${foodItem.cal}", fontSize = 14.sp)
+                        Text("Cals/Serving: ${foodItem.caloriesPerServing}", fontSize = 14.sp)
+                        Text("Cal%: ${foodItem.percentCalFromProtein}")
                     }
                     Column(modifier = Modifier.weight(1f)) {
-                        Text("Cost/50g: ${foodItem.fiftyGrams}", fontSize = 14.sp)
-                        Text("Cost/g: ${foodItem.oneGram}", fontSize = 14.sp)
+                        Text("Cost/50g: ${foodItem.costPer50}", fontSize = 14.sp)
+                        Text("Cost/g: ${foodItem.costPerGram}", fontSize = 14.sp)
                         Text("Cost/Serving: ${foodItem.servingCost}", fontSize = 14.sp)
                     }
                 }
@@ -139,10 +140,7 @@ fun PreviewProteinCostList() {
             servings = 200.0,
             grams = 150.0,
             price = 5.99,
-            fiftyGrams = "1.50",
-            oneGram = "0.03",
-            cal = 120.0,
-            calories = "80"
+            calories = 80.0
         ),
         ProteinCostData(
             id = "2",
@@ -150,10 +148,7 @@ fun PreviewProteinCostList() {
             servings = 150.0,
             grams = 200.0,
             price = 8.99,
-            fiftyGrams = "2.00",
-            oneGram = "0.04",
-            cal = 150.0,
-            calories = "75"
+            calories = 70.0
         )
     )
 

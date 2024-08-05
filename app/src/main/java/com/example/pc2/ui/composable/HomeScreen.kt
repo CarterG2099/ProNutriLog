@@ -39,6 +39,7 @@ fun HomeScreen() {
     var proteinCostList by remember { mutableStateOf(mutableListOf<ProteinCostData>()) }
 
 
+
     // Function to clear all fields
     fun clearFields() {
         foodText = ""
@@ -57,19 +58,13 @@ fun HomeScreen() {
         val calories = caloriesText.toDoubleOrNull() ?: 0.0
 
         if (servings > 0 && grams > 0 && price > 0 && calories > 0) {
-            val fiftyGramsCost = String.format("%.2f", (price / (grams * servings)) * 50)
-            val oneGramCost = String.format("%.2f", (price / (grams * servings)) * 100)
-
             val item = ProteinCostData(
                 id = UUID.randomUUID().toString(),
                 foodSource = foodText,
                 servings = servings,
                 grams = grams,
                 price = price,
-                fiftyGrams = fiftyGramsCost,
-                oneGram = oneGramCost,
-                cal = calories,
-                calories = String.format("%.2f", ((grams * 4) / calories) * 100),
+                calories = calories,
                 isSelected = false,
             )
 
@@ -85,27 +80,7 @@ fun HomeScreen() {
         }
     }
 
-    fun calculate() {
-        val servings = servingsText.toDoubleOrNull() ?: 0.0
-        val grams = gramsText.toDoubleOrNull() ?: 0.0
-        val price = priceText.toDoubleOrNull() ?: 0.0
-        val calories = caloriesText.toDoubleOrNull() ?: 0.0
 
-        // Check for invalid input
-        if (servings == 0.0 || grams == 0.0 || price == 0.0 || calories == 0.0) {
-            costPer50 = ""
-            unitCost = "Please Provide Valid Information"
-            return
-        }
-
-        // Perform calculations
-        val unitCostValue = (price / (grams * servings)) * 100
-        val costPer50Value = (price / (grams * servings)) * 50
-
-        // Format results
-        costPer50 = "50g: $" + String.format("%.2f", costPer50Value)
-        unitCost = "1g: " + String.format("%.2f", unitCostValue) + " Cents"
-    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -223,18 +198,6 @@ fun HomeScreen() {
             }
         ) {
             Text("Save")
-        }
-
-        // Calculate Button
-        Button(
-            onClick = { calculate() },
-            modifier = Modifier.constrainAs(calcButton) {
-                bottom.linkTo(parent.bottom, margin = 32.dp)
-                start.linkTo(saveButton.end, margin = 16.dp)
-                end.linkTo(clearButton.start, margin = 16.dp)
-            }
-        ) {
-            Text("Calculate")
         }
 
         // Clear Button

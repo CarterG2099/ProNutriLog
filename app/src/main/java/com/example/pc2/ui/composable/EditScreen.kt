@@ -15,6 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pc2.ProteinCostViewModel
 
 @Composable
 fun EditScreen(
@@ -23,12 +25,14 @@ fun EditScreen(
     onSave: (ProteinCostData) -> Unit
 ) {
 
+    val viewModel: ProteinCostViewModel = viewModel()
+
     // Define state for each text field
     var foodText by remember { mutableStateOf(foodItem.foodSource) }
     var servingsText by remember { mutableStateOf(foodItem.servings.toString()) }
     var gramsText by remember { mutableStateOf(foodItem.grams.toString()) }
     var priceText by remember { mutableStateOf(foodItem.price.toString()) }
-    var caloriesText by remember { mutableStateOf(foodItem.cal.toString()) }
+    var caloriesText by remember { mutableStateOf(foodItem.calories.toString()) }
 
     val context = LocalContext.current
 
@@ -91,7 +95,7 @@ fun EditScreen(
                     servings = servingsText.toDoubleOrNull() ?: 0.0,
                     grams = gramsText.toDoubleOrNull() ?: 0.0,
                     price = priceText.toDoubleOrNull() ?: 0.0,
-                    cal = caloriesText.toDoubleOrNull() ?: 0.0
+                    calories = caloriesText.toDoubleOrNull() ?: 0.0,
                 )
 
                 // Call the onSave callback with the updated item

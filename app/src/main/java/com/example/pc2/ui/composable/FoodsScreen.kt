@@ -66,13 +66,18 @@ fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
         viewModel.updateFoodItem(context, updatedItem, true)
     }
 
+    // Filter the list based on the search query
+    val filteredList = proteinCostList.filter {
+        it.foodSource.contains(searchText, ignoreCase = true)
+    }
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         // Create references for the UI elements
-        val (searchBar, foodButton, costPer50Button, costPer1Button, servingCostButton, servingsButton, gramsButton, priceButton, calPercentButton, recyclerView) = createRefs()
+        val (foodButton, costPer50Button, costPer1Button, servingCostButton, servingsButton, gramsButton, priceButton, calPercentButton, recyclerView) = createRefs()
 
         // Define constraints
         val topGuideline = createGuidelineFromTop(0.1f)
@@ -217,7 +222,7 @@ fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
                 }
                 .padding(8.dp)
         ) {
-            items(proteinCostList) { item ->
+            items(filteredList) { item ->
                 ProteinCostItem(foodItem = item, onDelete = handleDelete, onEdit = handleEdit)
             }
         }
