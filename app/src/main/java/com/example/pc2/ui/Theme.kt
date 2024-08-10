@@ -1,11 +1,13 @@
 // File: ui/theme/Theme.kt
 
-package com.example.pc2.ui.theme
+package com.example.pc2.ui
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
-import androidx.compose.material.lightColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -19,41 +21,47 @@ val Purple200 = Color(0xFFBB86FC)
 val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
-val Royal = Color(0xFF4169E1)
+val RoyalBlue = Color(0xFF4169E1)
 
-private val LightColorPalette = lightColors(
-    primary = Royal,
-    primaryVariant = Purple700,
+private val LightColorPalette = lightColorScheme(
+    primary = RoyalBlue,
+    primaryContainer = Purple700, // Adjusted for new color scheme parameters
     secondary = Teal200
 )
 
-private val Typography = androidx.compose.material.Typography(
-    h1 = TextStyle(
+private val DarkColorPalette = darkColorScheme(
+    primary = RoyalBlue,
+    primaryContainer = Purple700, // Adjusted for new color scheme parameters
+    secondary = Teal200
+)
+
+private val Typography = androidx.compose.material3.Typography(
+    headlineLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
         fontSize = 30.sp
     ),
-    h2 = TextStyle(
+    titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp
     ),
-    // Add more text styles here
 )
 
 @Composable
 fun MyTheme(
     content: @Composable () -> Unit
 ) {
+    val darkTheme = isSystemInDarkTheme()
+    val colorScheme = if (darkTheme) DarkColorPalette else LightColorPalette
+
     MaterialTheme(
-        colors = LightColorPalette,
+        colorScheme = colorScheme,
         typography = Typography,
-        shapes = Shapes, // You can define shapes if needed
+        shapes = Shapes, // Use defined Shapes
         content = content
     )
 }
-
-
 
 // Shapes
 val Shapes = Shapes(
