@@ -19,9 +19,10 @@ val Purple200 = Color(0xFFBB86FC)
 val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
+val Royal = Color(0xFF4169E1)
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
+    primary = Royal,
     primaryVariant = Purple700,
     secondary = Teal200
 )

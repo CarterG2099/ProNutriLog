@@ -12,18 +12,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pc2.ProteinCostViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SortList(proteinCostList: List<ProteinCostData>, modifier: Modifier) {
-    val options = listOf("Price", "Calories", "Grams", "Servings")
+fun SortList(viewModel: ProteinCostViewModel, modifier: Modifier) {
+    val options = listOf("Name", "Price", "Calories", "Grams", "Servings")
     var selectedOption by remember { mutableStateOf(options[0]) }
-    val viewModel = ProteinCostViewModel()
+    var isAscending by remember { mutableStateOf(true) }
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = modifier.padding(16.dp)) {
         Text(
             text = "Sort By:",
             style = MaterialTheme.typography.bodyLarge
@@ -33,8 +32,14 @@ fun SortList(proteinCostList: List<ProteinCostData>, modifier: Modifier) {
                 SegmentedButton(
                     selected = selectedOption == option,
                     onClick = {
-                        selectedOption = option
-                        viewModel.sortProteinCostList(selectedOption, proteinCostList)
+                        if (selectedOption == option) {
+                            isAscending = !isAscending
+                        } else {
+                            selectedOption = option
+                            isAscending = true
+                        }
+                        viewModel.sortProteinCostList(selectedOption, isAscending)
+                        viewModel.sortProteinCostList(selectedOption, isAscending)
 
                               },
                     shape = SegmentedButtonDefaults.itemShape(
