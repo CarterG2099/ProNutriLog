@@ -77,7 +77,7 @@ fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
             .padding(16.dp)
     ) {
         // Create references for the UI elements
-        val (foodButton, costPer50Button, costPer1Button, servingCostButton, servingsButton, gramsButton, priceButton, calPercentButton, recyclerView) = createRefs()
+        val (searchBar, sortList, foodButton, costPer50Button, costPer1Button, servingCostButton, servingsButton, gramsButton, priceButton, calPercentButton, recyclerView) = createRefs()
 
         // Define constraints
         val topGuideline = createGuidelineFromTop(0.1f)
@@ -102,115 +102,128 @@ fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
             },
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
-            }
+            },
+            modifier = Modifier.constrainAs(searchBar) {
+                top.linkTo(topGuideline)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                width = Dimension.fillToConstraints
+                }
         ) {
             Text("Search")
         }
 
+        // Sort List
+        SortList(filteredList, modifier = Modifier.constrainAs(sortList) {
+            top.linkTo(searchBar.top, margin = 16.dp)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        })
+
         // Food Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(foodButton) {
-                top.linkTo(topGuideline)
-                start.linkTo(parent.start)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            }
-        ) {
-            Text("Food")
-        }
-
-        // Cost Per 50 Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(costPer50Button) {
-                top.linkTo(topGuideline)
-                start.linkTo(foodButton.end, margin = 5.dp)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            }
-        ) {
-            Text("50g")
-        }
-
-        // Cost Per 1 Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(costPer1Button) {
-                top.linkTo(topGuideline)
-                start.linkTo(costPer50Button.end)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            }
-        ) {
-            Text("1g")
-        }
-
-        // Serving Cost Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(servingCostButton) {
-                top.linkTo(topGuideline)
-                start.linkTo(costPer1Button.end)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            }
-        ) {
-            Text("Svg $")
-        }
-
-        // Servings Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(servingsButton) {
-                top.linkTo(topGuideline)
-                start.linkTo(servingCostButton.end)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            }
-        ) {
-            Text("#")
-        }
-
-        // Grams Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(gramsButton) {
-                top.linkTo(topGuideline)
-                start.linkTo(servingsButton.end)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            }
-        ) {
-            Text("g")
-        }
-
-        // Price Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(priceButton) {
-                top.linkTo(topGuideline)
-                start.linkTo(gramsButton.end)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            }
-        ) {
-            Text("Price")
-        }
-
-        // Cal Percent Button
-        Button(
-            onClick = {},
-            modifier = Modifier.constrainAs(calPercentButton) {
-                top.linkTo(topGuideline)
-                start.linkTo(priceButton.end)
-                end.linkTo(parent.end)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            }
-        ) {
-            Text("%")
-        }
+//        Button(
+//            onClick = {},
+//            modifier = Modifier.constrainAs(foodButton) {
+//                top.linkTo(topGuideline)
+//                start.linkTo(parent.start)
+//                width = Dimension.wrapContent
+//                height = Dimension.wrapContent
+//            }
+//        ) {
+//            Text("Food")
+//        }
+//
+//        // Cost Per 50 Button
+//        Button(
+//            onClick = {},
+//            modifier = Modifier.constrainAs(costPer50Button) {
+//                top.linkTo(topGuideline)
+//                start.linkTo(foodButton.end, margin = 5.dp)
+//                width = Dimension.wrapContent
+//                height = Dimension.wrapContent
+//            }
+//        ) {
+//            Text("50g")
+//        }
+//
+//        // Cost Per 1 Button
+//        Button(
+//            onClick = {},
+//            modifier = Modifier.constrainAs(costPer1Button) {
+//                top.linkTo(topGuideline)
+//                start.linkTo(costPer50Button.end)
+//                width = Dimension.wrapContent
+//                height = Dimension.wrapContent
+//            }
+//        ) {
+//            Text("1g")
+//        }
+//
+//        // Serving Cost Button
+//        Button(
+//            onClick = {},
+//            modifier = Modifier.constrainAs(servingCostButton) {
+//                top.linkTo(topGuideline)
+//                start.linkTo(costPer1Button.end)
+//                width = Dimension.wrapContent
+//                height = Dimension.wrapContent
+//            }
+//        ) {
+//            Text("Svg $")
+//        }
+//
+//        // Servings Button
+//        Button(
+//            onClick = {},
+//            modifier = Modifier.constrainAs(servingsButton) {
+//                top.linkTo(topGuideline)
+//                start.linkTo(servingCostButton.end)
+//                width = Dimension.wrapContent
+//                height = Dimension.wrapContent
+//            }
+//        ) {
+//            Text("#")
+//        }
+//
+//        // Grams Button
+//        Button(
+//            onClick = {},
+//            modifier = Modifier.constrainAs(gramsButton) {
+//                top.linkTo(topGuideline)
+//                start.linkTo(servingsButton.end)
+//                width = Dimension.wrapContent
+//                height = Dimension.wrapContent
+//            }
+//        ) {
+//            Text("g")
+//        }
+//
+//        // Price Button
+//        Button(
+//            onClick = {},
+//            modifier = Modifier.constrainAs(priceButton) {
+//                top.linkTo(topGuideline)
+//                start.linkTo(gramsButton.end)
+//                width = Dimension.wrapContent
+//                height = Dimension.wrapContent
+//            }
+//        ) {
+//            Text("Price")
+//        }
+//
+//        // Cal Percent Button
+//        Button(
+//            onClick = {},
+//            modifier = Modifier.constrainAs(calPercentButton) {
+//                top.linkTo(topGuideline)
+//                start.linkTo(priceButton.end)
+//                end.linkTo(parent.end)
+//                width = Dimension.wrapContent
+//                height = Dimension.wrapContent
+//            }
+//        ) {
+//            Text("%")
+//        }
 
         // LazyColumn to display the list of ProteinCostData items
         LazyColumn(

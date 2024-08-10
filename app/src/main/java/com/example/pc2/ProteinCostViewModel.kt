@@ -14,12 +14,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class ProteinCostViewModel : ViewModel() {
-    private val TAG = "ViewModel" //Debugging Tag
-
-//    // Define a LiveData for the list of ProteinCostData
-//    var proteinCostList = mutableListOf<ProteinCostData>()
-//    val proteinCostLiveData: MutableLiveData<List<ProteinCostData>> = MutableLiveData()
-
 
     // Define a LiveData for the list of ProteinCostData
     private val _proteinCostLiveData = MutableLiveData<List<ProteinCostData>>()
@@ -94,6 +88,18 @@ class ProteinCostViewModel : ViewModel() {
     // Update protein cost list
     private fun updateProteinCostList(newData: List<ProteinCostData>) {
         _proteinCostLiveData.value = newData
+    }
+
+    //Sort the list by given attribute
+    fun sortProteinCostList(sortAttribute: String, proteinCostList: List<ProteinCostData>): List<ProteinCostData> {
+        return when (sortAttribute) {
+            "foodSource" -> proteinCostList.sortedBy { it.foodSource }
+            "servings" -> proteinCostList.sortedBy { it.servings }
+            "grams" -> proteinCostList.sortedBy { it.grams }
+            "price" -> proteinCostList.sortedBy { it.price }
+            "calories" -> proteinCostList.sortedBy { it.calories }
+            else -> proteinCostList
+        }
     }
 
 }
