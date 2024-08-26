@@ -3,10 +3,6 @@ package com.example.pc2
 import ProteinCostData
 import android.content.Context
 import android.util.Log
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,12 +10,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class ProteinCostViewModel : ViewModel() {
-    private val TAG = "ViewModel" //Debugging Tag
-
-//    // Define a LiveData for the list of ProteinCostData
-//    var proteinCostList = mutableListOf<ProteinCostData>()
-//    val proteinCostLiveData: MutableLiveData<List<ProteinCostData>> = MutableLiveData()
-
 
     // Define a LiveData for the list of ProteinCostData
     private val _proteinCostLiveData = MutableLiveData<List<ProteinCostData>>()
@@ -85,15 +75,33 @@ class ProteinCostViewModel : ViewModel() {
         }
     }
 
-    // Load data and update LiveData
+    // Load data, sort by food source by default, and update LiveData
     fun loadSavedData(context: Context) {
-        val data = loadSavedDataFromSharedPreferences(context)
-        updateProteinCostList(data)
+        val data: List<ProteinCostData> = loadSavedDataFromSharedPreferences(context)
+        val sortedData = data.sortedBy { it.foodSource } // Capture the sorted list
+        updateProteinCostList(sortedData)
     }
 
     // Update protein cost list
     private fun updateProteinCostList(newData: List<ProteinCostData>) {
         _proteinCostLiveData.value = newData
     }
+
+    fun sortProteinCostList(sortAttribute: String, isAscending: Boolean) {
+        val currentList = _proteinCostLiveData.value ?: return
+
+        val sortedList = when (sortAttribute) {
+            "Name" -> if (isAscending) currentList.sortedBy { it.foodSource } else currentList.sortedByDescending { it.foodSource }
+            "Servings" -> if (isAscending) currentList.sortedBy { it.servings } else currentList.sortedByDescending { it.servings }
+            "Grams" -> if (isAscending) currentList.sortedBy { it.grams } else currentList.sortedByDescending { it.grams }
+            "Price" -> if (isAscending) currentList.sortedBy { it.price } else currentList.sortedByDescending { it.price }
+            "Calories" -> if (isAscending) currentList.sortedBy { it.calories } else currentList.sortedByDescending { it.calories }
+            else -> currentList
+        }
+
+        _proteinCostLiveData.value = sortedList
+    }
+
+
 
 }
