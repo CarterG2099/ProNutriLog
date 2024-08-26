@@ -52,7 +52,7 @@ private val Typography = androidx.compose.material3.Typography(
 fun MyTheme(
     content: @Composable () -> Unit
 ) {
-    val darkTheme = isSystemInDarkTheme()
+    val darkTheme: Boolean = isSystemInDarkTheme()
     val colorScheme = if (darkTheme) DarkColorPalette else LightColorPalette
 
     MaterialTheme(

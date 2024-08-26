@@ -1,4 +1,5 @@
 import android.widget.Toast
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -79,10 +80,21 @@ fun HomeScreen() {
             .padding(8.dp)
     ) {
         // Create references for the UI elements
-        val (foodDisplay, servingsDisplay, gramsDisplay, priceDisplay, caloriesDisplay, costPer50Display, unitCostDisplay, saveButton, calcButton, clearButton) = createRefs()
+        val (foodDisplay, servingsDisplay, gramsDisplay, priceDisplay, caloriesDisplay, costPer50Display, unitCostDisplay, saveButton, header, clearButton) = createRefs()
 
         // Define constraints
         val topGuideline = createGuidelineFromTop(0.1f)
+
+        //Header
+        Text(
+            text = "ProNutriLog",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.constrainAs(header) {
+                top.linkTo(parent.top, margin = 16.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        )
 
         // Food EditText
         OutlinedTextField(
