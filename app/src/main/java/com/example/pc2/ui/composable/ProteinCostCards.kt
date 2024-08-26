@@ -109,21 +109,24 @@ fun ProteinCostCard(foodItem: ProteinCostData) {
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                // Data Rows
+                // Header Row
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Servings: ${foodItem.servings}", fontSize = 14.sp)
-                        Text("Total $: ${foodItem.price}", fontSize = 14.sp)
+                    val headerTexts = listOf("Cost", "Serv", "Grams", "k/Serv", "$/50g", "$/g", "$/Serv", "Cal %")
+                    headerTexts.forEach {
+                        Text(it, fontSize = 12.sp, modifier = Modifier.weight(1f).padding(end = 1.dp))
                     }
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Protein (g): ${foodItem.grams}", fontSize = 14.sp)
-                        Text("Cals/Serving: ${foodItem.caloriesPerServing}", fontSize = 14.sp)
-                        Text("Cal%: ${foodItem.percentCalFromProtein}")
-                    }
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Cost/50g: ${foodItem.costPer50}", fontSize = 14.sp)
-                        Text("Cost/g: ${foodItem.costPerGram}", fontSize = 14.sp)
-                        Text("Cost/Serving: ${foodItem.servingCost}", fontSize = 14.sp)
+                }
+
+                // Data Row
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    val dataTexts = listOf(
+                        "${foodItem.price}", "${foodItem.servings}", "${foodItem.grams}",
+                        "${foodItem.caloriesPerServing}", "${foodItem.costPer50}",
+                        "${foodItem.costPerGram}", "${foodItem.servingCost}",
+                        "${foodItem.percentCalFromProtein}"
+                    )
+                    dataTexts.forEach {
+                        Text(it, fontSize = 12.sp, modifier = Modifier.weight(1f).padding(end = 1.dp))
                     }
                 }
             }

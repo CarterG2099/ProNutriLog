@@ -92,10 +92,10 @@ class ProteinCostViewModel : ViewModel() {
 
         val sortedList = when (sortAttribute) {
             "Name" -> if (isAscending) currentList.sortedBy { it.foodSource } else currentList.sortedByDescending { it.foodSource }
-            "Servings" -> if (isAscending) currentList.sortedBy { it.servings } else currentList.sortedByDescending { it.servings }
+            "Serv" -> if (isAscending) currentList.sortedBy { it.servings } else currentList.sortedByDescending { it.servings }
             "Grams" -> if (isAscending) currentList.sortedBy { it.grams } else currentList.sortedByDescending { it.grams }
             "Price" -> if (isAscending) currentList.sortedBy { it.price } else currentList.sortedByDescending { it.price }
-            "Calories" -> if (isAscending) currentList.sortedBy { it.calories } else currentList.sortedByDescending { it.calories }
+            "Cals" -> if (isAscending) currentList.sortedBy { it.calories } else currentList.sortedByDescending { it.calories }
             else -> currentList
         }
 

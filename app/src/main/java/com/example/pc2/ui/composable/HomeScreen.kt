@@ -2,6 +2,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -11,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -27,7 +29,6 @@ fun HomeScreen() {
     val viewModel: ProteinCostViewModel = viewModel()
     val context = LocalContext.current
 
-
     // Define state for each text field
     var foodText by remember { mutableStateOf("") }
     var servingsText by remember { mutableStateOf("") }
@@ -36,9 +37,6 @@ fun HomeScreen() {
     var caloriesText by remember { mutableStateOf("") }
     var costPer50 by remember { mutableStateOf("50g: ") }
     var unitCost by remember { mutableStateOf("1g: ") }
-    var proteinCostList by remember { mutableStateOf(mutableListOf<ProteinCostData>()) }
-
-
 
     // Function to clear all fields
     fun clearFields() {
@@ -68,15 +66,8 @@ fun HomeScreen() {
                 isSelected = false,
             )
 
-//            viewModel.loadSavedData()
-//            proteinCostList.add(item)
-//            viewModel.updateProteinCostList(foodItems)
-//            viewModel.saveFoodItems(context, foodItems)
-//            viewModel.updateDataToSharedPreferences(context, foodItems)
-
             viewModel.updateFoodItem(context, item, false)
             Toast.makeText(context, "Saved ${item.foodSource}", Toast.LENGTH_SHORT).show()
-//            clearFields()
         }
     }
 
@@ -85,7 +76,7 @@ fun HomeScreen() {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(8.dp)
     ) {
         // Create references for the UI elements
         val (foodDisplay, servingsDisplay, gramsDisplay, priceDisplay, caloriesDisplay, costPer50Display, unitCostDisplay, saveButton, calcButton, clearButton) = createRefs()
@@ -163,38 +154,19 @@ fun HomeScreen() {
             }
         )
 
-        // Cost Per 50 TextView
-        Text(
-            text = costPer50,
-            modifier = Modifier.constrainAs(costPer50Display) {
-                top.linkTo(caloriesDisplay.bottom, margin = 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            },
-            style = MaterialTheme.typography.bodyLarge
-        )
-
-        // Unit Cost TextView
-        Text(
-            text = unitCost,
-            modifier = Modifier.constrainAs(unitCostDisplay) {
-                top.linkTo(costPer50Display.bottom, margin = 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                width = Dimension.wrapContent
-                height = Dimension.wrapContent
-            },
-            style = MaterialTheme.typography.bodyLarge
-        )
-
         // Save Button
         Button(
             onClick = { saveItem() },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Green,
+                contentColor = Color.White
+            ),
             modifier = Modifier.constrainAs(saveButton) {
-                bottom.linkTo(parent.bottom, margin = 32.dp)
+                top.linkTo(caloriesDisplay.bottom, margin = 16.dp)
                 start.linkTo(parent.start)
+                end.linkTo(clearButton.end)
+                width = Dimension.wrapContent
+                height = Dimension.wrapContent
             }
         ) {
             Text("Save")
@@ -203,12 +175,20 @@ fun HomeScreen() {
         // Clear Button
         Button(
             onClick = { clearFields() },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Red,
+                contentColor = Color.White
+            ),
             modifier = Modifier.constrainAs(clearButton) {
-                bottom.linkTo(parent.bottom, margin = 32.dp)
+                top.linkTo(caloriesDisplay.bottom, margin = 16.dp)
+                start.linkTo(saveButton.start)
                 end.linkTo(parent.end)
+                width = Dimension.wrapContent
+                height = Dimension.wrapContent
             }
         ) {
             Text("Clear")
+            Color(0xFF000000)
         }
     }
 

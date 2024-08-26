@@ -18,7 +18,7 @@ import com.example.pc2.ProteinCostViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SortList(viewModel: ProteinCostViewModel, modifier: Modifier) {
-    val options = listOf("Name", "Price", "Calories", "Grams", "Servings")
+    val options = listOf("Name", "Price", "Cals", "Grams", "Serv")
     var selectedOption by remember { mutableStateOf(options[0]) }
     var isAscending by remember { mutableStateOf(true) }
 
