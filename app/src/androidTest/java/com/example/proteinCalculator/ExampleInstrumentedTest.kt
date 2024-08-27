@@ -1,4 +1,4 @@
-package com.example.pc2
+package com.example.proteinCalculator
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

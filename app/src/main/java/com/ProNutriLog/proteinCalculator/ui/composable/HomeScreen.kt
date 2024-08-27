@@ -1,5 +1,4 @@
 import android.widget.Toast
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -19,7 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.pc2.ProteinCostViewModel
+import com.ProNutriLog.proteinCalculator.ProteinCostData
+import com.ProNutriLog.proteinCalculator.ProteinCostViewModel
 import java.util.UUID
 
 

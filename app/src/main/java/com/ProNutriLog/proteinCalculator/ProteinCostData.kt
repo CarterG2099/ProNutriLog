@@ -1,3 +1,5 @@
+package com.ProNutriLog.proteinCalculator
+
 data class ProteinCostData(
     var id: String,
     var foodSource: String,

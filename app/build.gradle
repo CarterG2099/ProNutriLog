@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.pc2'
+    namespace 'com.ProNutriLog.proteinCalculator'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.pc2.beta"
+        applicationId "com.ProNutriLog.proteinCalculator"
         minSdk 24
         targetSdk 34
         versionCode 1

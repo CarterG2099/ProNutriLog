@@ -1,4 +1,4 @@
-package com.example.pc2
+package com.example.proteinCalculator
 
 import org.junit.Test
 

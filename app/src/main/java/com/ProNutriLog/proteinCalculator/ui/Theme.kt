@@ -1,6 +1,6 @@
 // File: ui/theme/Theme.kt
 
-package com.example.pc2.ui
+package com.ProNutriLog.proteinCalculator.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape

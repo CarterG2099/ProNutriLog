@@ -1,6 +1,5 @@
-package com.example.pc2
+package com.ProNutriLog.proteinCalculator
 
-import ProteinCostData
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData

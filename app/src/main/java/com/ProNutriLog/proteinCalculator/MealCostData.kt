@@ -1,6 +1,4 @@
-package com.example.pc2
-
-import ProteinCostData
+package com.ProNutriLog.proteinCalculator
 
 data class MealCostData(
     val mealName: String,
