@@ -8,6 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.json.JSONObject
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
 
 class ProteinCostViewModel : ViewModel() {
 
@@ -102,6 +106,27 @@ class ProteinCostViewModel : ViewModel() {
         _proteinCostLiveData.value = sortedList
     }
 
+    fun saveSharedPreferencesToExternalStorage(context: Context) {
+        val sharedPreferences =
+            context.getSharedPreferences("your_prefs_name", Context.MODE_PRIVATE)
+        val allEntries = sharedPreferences.all
 
+        // Convert allEntries to JSON
+        val jsonObject = JSONObject(allEntries)
+
+        // Define the file path in external storage
+        val externalFilesDir = context.getExternalFilesDir(null) // or specify a directory
+        val file = File(externalFilesDir, "shared_prefs_backup.json")
+
+        // Write JSON data to the file
+        try {
+            val fileOutputStream = FileOutputStream(file)
+            val outputStreamWriter = OutputStreamWriter(fileOutputStream)
+            outputStreamWriter.write(jsonObject.toString())
+            outputStreamWriter.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
 }
