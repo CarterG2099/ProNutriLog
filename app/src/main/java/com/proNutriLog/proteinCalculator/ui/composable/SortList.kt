@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ProNutriLog.proteinCalculator.ProteinCostViewModel
+import com.proNutriLog.proteinCalculator.ProteinCostViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
