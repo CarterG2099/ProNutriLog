@@ -20,8 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.ProNutriLog.proteinCalculator.ProteinCostData
-import com.ProNutriLog.proteinCalculator.ProteinCostViewModel
+import com.proNutriLog.proteinCalculator.ProteinCostData
+import com.proNutriLog.proteinCalculator.ProteinCostViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)

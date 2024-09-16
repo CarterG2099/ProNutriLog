@@ -1,4 +1,4 @@
-package com.ProNutriLog.proteinCalculator
+package com.proNutriLog.proteinCalculator
 
 import FoodsScreen
 import HomeScreen
@@ -20,7 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ProNutriLog.proteinCalculator.ui.MyTheme
+import com.proNutriLog.proteinCalculator.ui.MyTheme
 
 class MainActivity : ComponentActivity() {
 

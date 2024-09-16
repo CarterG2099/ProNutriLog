@@ -8,7 +8,6 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.ProNutriLog.proteinCalculator"
         minSdk 24
         targetSdk 34
         versionCode 1
@@ -22,7 +21,30 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        // Optionally, you can also add debug build types with specific configurations
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
     }
+
+    // Define product flavors for different environments
+    flavorDimensions += "version"
+    productFlavors {
+        prod {
+            dimension "version"
+            applicationId "com.ProNutriLog.proteinCalculator"
+            versionNameSuffix "-prod"
+        }
+
+        dev {
+            dimension "version"
+            applicationId "com.ProNutriLog.proteinCalculator.dev"
+            versionNameSuffix "-dev"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

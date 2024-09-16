@@ -1,4 +1,4 @@
-package com.ProNutriLog.proteinCalculator
+package com.proNutriLog.proteinCalculator
 
 import android.content.Context
 import android.util.Log
