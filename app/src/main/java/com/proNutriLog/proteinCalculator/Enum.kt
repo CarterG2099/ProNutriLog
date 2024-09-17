@@ -1,4 +1,15 @@
 package com.proNutriLog.proteinCalculator
 
-class Action {
+enum class Action {
+    ADD,
+    UPDATE,
+    DELETE
+}
+
+enum class SortAttribute {
+    NAME,
+    SERVINGS,
+    GRAMS,
+    PRICE,
+    CALORIES
 }

@@ -1,10 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
-    namespace 'com.ProNutriLog.proteinCalculator'
+    namespace 'com.proNutriLog.proteinCalculator'
     compileSdk 34
 
     defaultConfig {
@@ -15,7 +16,18 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    signingConfigs {
+        release {
+            keyAlias project.property("KEY_ALIAS")
+            keyPassword project.property("KEY_PASSWORD")
+            storeFile file(project.property("STORE_FILE"))
+            storePassword project.property("STORE_PASSWORD")
+        }
+        debug {
+            // Debug signing config, usually automatically set up by Android Studio
+            storeFile file('path/to/debug.keystore')
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -34,13 +46,13 @@ android {
     productFlavors {
         prod {
             dimension "version"
-            applicationId "com.ProNutriLog.proteinCalculator"
+            applicationId "com.proNutriLog.proteinCalculator"
             versionNameSuffix "-prod"
         }
 
         dev {
             dimension "version"
-            applicationId "com.ProNutriLog.proteinCalculator.dev"
+            applicationId "com.proNutriLog.proteinCalculator.dev"
             versionNameSuffix "-dev"
         }
     }
@@ -70,6 +82,12 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
+
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:33.3.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-firestore:25.1.0' // Firestore library (example)
+
 
     // Jetpack Compose dependencies
     implementation 'androidx.compose.ui:ui:1.6.8'
