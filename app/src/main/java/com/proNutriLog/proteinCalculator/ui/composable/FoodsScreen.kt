@@ -32,7 +32,6 @@ fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
 
     val proteinCostList by viewModel.proteinCostLiveData.observeAsState(emptyList())
 
-    val context = LocalContext.current
     var selectedItem by remember { mutableStateOf<ProteinCostData?>(null) }
     var isEditDialogVisible by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
@@ -132,16 +131,8 @@ fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
                         }
                     )
                 },
-                confirmButton = {
-                    Button(onClick = { isEditDialogVisible = false }) {
-                        Text("Save")
-                    }
-                },
-                dismissButton = {
-                    Button(onClick = { isEditDialogVisible = false }) {
-                        Text("Close")
-                    }
-                }
+                confirmButton = {},
+                dismissButton = {}
             )
         }
     }

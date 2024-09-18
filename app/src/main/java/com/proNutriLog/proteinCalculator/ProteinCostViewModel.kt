@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
 
 class ProteinCostViewModel : ViewModel() {
 
@@ -16,19 +15,20 @@ class ProteinCostViewModel : ViewModel() {
     private val collectionRef = db.collection("proteinCostData")
 
     // Function to save or update food items in Firestore
-    fun updateFoodItem(newItem: ProteinCostData, action: Action) {
-        Log.d("SharedViewModel", "newItem: $newItem")
+    fun updateFoodItem(foodItem: ProteinCostData, action: Action) {
+        Log.d("SharedViewModel", "foodItem: $foodItem")
 
-        val docRef = collectionRef.document(newItem.id)
+        val docRef = collectionRef.document(foodItem.id)
+        Log.d("SharedViewModel", "docRef: $docRef")
 
         if (action == Action.UPDATE) {
             // Update specific fields in the document
             docRef.update(
-                "foodSource", newItem.foodSource,
-                "servings", newItem.servings,
-                "grams", newItem.grams,
-                "price", newItem.price,
-                "calories", newItem.calories
+                "foodSource", foodItem.foodSource,
+                "servings", foodItem.servings,
+                "grams", foodItem.grams,
+                "price", foodItem.price,
+                "calories", foodItem.calories
             )
                 .addOnSuccessListener {
                     Log.d("Firestore", "DocumentSnapshot successfully updated!")
@@ -38,7 +38,7 @@ class ProteinCostViewModel : ViewModel() {
                     Log.w("Firestore", "Error updating document", e)
                 }
         } else if (action == Action.ADD) {
-            docRef.set(newItem)
+            docRef.set(foodItem)
                 .addOnSuccessListener {
                     Log.d("Firestore", "DocumentSnapshot successfully written!")
                     loadSavedData()

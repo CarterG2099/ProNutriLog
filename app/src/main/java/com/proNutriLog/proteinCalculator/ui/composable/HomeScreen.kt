@@ -68,7 +68,7 @@ fun HomeScreen() {
                 isSelected = false,
             )
 
-            viewModel.updateFoodItem(item, Action.UPDATE)
+            viewModel.updateFoodItem(item, Action.ADD)
             Toast.makeText(context, "Saved ${item.foodSource}", Toast.LENGTH_SHORT).show()
         }
     }
@@ -81,7 +81,7 @@ fun HomeScreen() {
             .padding(8.dp)
     ) {
         // Create references for the UI elements
-        val (foodDisplay, servingsDisplay, gramsDisplay, priceDisplay, caloriesDisplay, costPer50Display, unitCostDisplay, saveButton, header, clearButton) = createRefs()
+        val (foodDisplay, servingsDisplay, gramsDisplay, priceDisplay, caloriesDisplay, saveButton, header, clearButton) = createRefs()
 
         // Define constraints
         val topGuideline = createGuidelineFromTop(0.1f)

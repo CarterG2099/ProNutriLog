@@ -25,9 +25,6 @@ fun EditScreen(
     onDismiss: () -> Unit,
     onSave: (ProteinCostData) -> Unit
 ) {
-
-    val viewModel: ProteinCostViewModel = viewModel()
-
     // Define state for each text field
     var foodText by remember { mutableStateOf(foodItem.foodSource) }
     var servingsText by remember { mutableStateOf(foodItem.servings.toString()) }
