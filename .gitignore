@@ -13,3 +13,11 @@
 .externalNativeBuild
 .cxx
 local.properties
+/.gradle.properties
+/my-release-key.jks
+/.app/goog-services.json
+/.app/release/app.release.aab
+/app/release/app-release.aab
+/app/google-services.json
+/gradle.properties
+/ProNutriLogKeyStore.jks

@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.proNutriLog.proteinCalculator.Action
 import com.proNutriLog.proteinCalculator.ProteinCostData
 import com.proNutriLog.proteinCalculator.ProteinCostViewModel
 
@@ -31,19 +32,18 @@ fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
 
     val proteinCostList by viewModel.proteinCostLiveData.observeAsState(emptyList())
 
-    val context = LocalContext.current
     var selectedItem by remember { mutableStateOf<ProteinCostData?>(null) }
     var isEditDialogVisible by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        viewModel.loadSavedData(context)
+        viewModel.loadSavedData()
     }
 
     val handleDelete: (ProteinCostData) -> Unit = { itemToDelete ->
         val updatedList = proteinCostList.toMutableList()
         updatedList.remove(itemToDelete)
-        viewModel.updateFoodItem(context, itemToDelete, false)
+        viewModel.updateFoodItem(itemToDelete, Action.DELETE)
     }
 
     val handleEdit: (ProteinCostData) -> Unit = { itemToEdit ->
@@ -52,7 +52,7 @@ fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
     }
 
     val handleSave: (ProteinCostData) -> Unit = { updatedItem ->
-        viewModel.updateFoodItem(context, updatedItem, true)
+        viewModel.updateFoodItem(updatedItem, Action.ADD)
     }
 
     val filteredList = proteinCostList.filter {
@@ -131,16 +131,8 @@ fun FoodsScreen(viewModel: ProteinCostViewModel = viewModel()) {
                         }
                     )
                 },
-                confirmButton = {
-                    Button(onClick = { isEditDialogVisible = false }) {
-                        Text("Save")
-                    }
-                },
-                dismissButton = {
-                    Button(onClick = { isEditDialogVisible = false }) {
-                        Text("Close")
-                    }
-                }
+                confirmButton = {},
+                dismissButton = {}
             )
         }
     }

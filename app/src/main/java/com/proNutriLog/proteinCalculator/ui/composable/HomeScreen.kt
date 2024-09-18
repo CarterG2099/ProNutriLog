@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.proNutriLog.proteinCalculator.Action
 import com.proNutriLog.proteinCalculator.ProteinCostData
 import com.proNutriLog.proteinCalculator.ProteinCostViewModel
 import java.util.UUID
@@ -67,7 +68,7 @@ fun HomeScreen() {
                 isSelected = false,
             )
 
-            viewModel.updateFoodItem(context, item, false)
+            viewModel.updateFoodItem(item, Action.ADD)
             Toast.makeText(context, "Saved ${item.foodSource}", Toast.LENGTH_SHORT).show()
         }
     }
@@ -80,7 +81,7 @@ fun HomeScreen() {
             .padding(8.dp)
     ) {
         // Create references for the UI elements
-        val (foodDisplay, servingsDisplay, gramsDisplay, priceDisplay, caloriesDisplay, costPer50Display, unitCostDisplay, saveButton, header, clearButton) = createRefs()
+        val (foodDisplay, servingsDisplay, gramsDisplay, priceDisplay, caloriesDisplay, saveButton, header, clearButton) = createRefs()
 
         // Define constraints
         val topGuideline = createGuidelineFromTop(0.1f)
