@@ -1,6 +1,6 @@
 // File: ui/theme/Theme.kt
 
-package com.example.pc2.ui
+package com.proNutriLog.proteinCalculator.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -52,7 +52,7 @@ private val Typography = androidx.compose.material3.Typography(
 fun MyTheme(
     content: @Composable () -> Unit
 ) {
-    val darkTheme = isSystemInDarkTheme()
+    val darkTheme: Boolean = isSystemInDarkTheme()
     val colorScheme = if (darkTheme) DarkColorPalette else LightColorPalette
 
     MaterialTheme(

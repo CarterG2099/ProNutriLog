@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
@@ -33,6 +34,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -41,7 +43,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pc2.R
+import com.proNutriLog.proteinCalculator.R
+import com.proNutriLog.proteinCalculator.ProteinCostData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,21 +110,24 @@ fun ProteinCostCard(foodItem: ProteinCostData) {
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                // Data Rows
+                // Header Row
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Servings: ${foodItem.servings}", fontSize = 14.sp)
-                        Text("Total $: ${foodItem.price}", fontSize = 14.sp)
+                    val headerTexts = listOf("Cost", "Serv", "Grams", "k/Serv", "$/50g", "$/g", "$/Serv", "Cal %")
+                    headerTexts.forEach {
+                        Text(it, fontSize = 12.sp, modifier = Modifier.weight(1f).padding(end = 1.dp))
                     }
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Protein (g): ${foodItem.grams}", fontSize = 14.sp)
-                        Text("Cals/Serving: ${foodItem.caloriesPerServing}", fontSize = 14.sp)
-                        Text("Cal%: ${foodItem.percentCalFromProtein}")
-                    }
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Cost/50g: ${foodItem.costPer50}", fontSize = 14.sp)
-                        Text("Cost/g: ${foodItem.costPerGram}", fontSize = 14.sp)
-                        Text("Cost/Serving: ${foodItem.servingCost}", fontSize = 14.sp)
+                }
+
+                // Data Row
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    val dataTexts = listOf(
+                        "${foodItem.price}", "${foodItem.servings}", "${foodItem.grams}",
+                        "${foodItem.caloriesPerServing}", "${foodItem.costPer50}",
+                        "${foodItem.costPerGram}", "${foodItem.servingCost}",
+                        "${foodItem.percentCalFromProtein}"
+                    )
+                    dataTexts.forEach {
+                        Text(it, fontSize = 12.sp, modifier = Modifier.weight(1f).padding(end = 1.dp))
                     }
                 }
             }
@@ -180,6 +186,8 @@ fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     Row(
         modifier = Modifier
             .fillMaxSize()
+            .padding(8.dp)
+            .clip(RoundedCornerShape(8.dp))
             .background(color)
             .padding(24.dp),
         verticalAlignment = Alignment.CenterVertically,

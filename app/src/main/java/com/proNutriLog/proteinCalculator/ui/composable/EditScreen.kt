@@ -16,7 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.pc2.ProteinCostViewModel
+import com.proNutriLog.proteinCalculator.ProteinCostData
+import com.proNutriLog.proteinCalculator.ProteinCostViewModel
 
 @Composable
 fun EditScreen(
@@ -24,9 +25,6 @@ fun EditScreen(
     onDismiss: () -> Unit,
     onSave: (ProteinCostData) -> Unit
 ) {
-
-    val viewModel: ProteinCostViewModel = viewModel()
-
     // Define state for each text field
     var foodText by remember { mutableStateOf(foodItem.foodSource) }
     var servingsText by remember { mutableStateOf(foodItem.servings.toString()) }

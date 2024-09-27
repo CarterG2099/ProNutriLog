@@ -1,10 +1,12 @@
+package com.proNutriLog.proteinCalculator
+
 data class ProteinCostData(
-    var id: String,
-    var foodSource: String,
-    var servings: Double,
-    var grams: Double,
-    var price: Double,
-    var calories: Double,
+    var id: String = "",
+    var foodSource: String = "",
+    var servings: Double= 0.0,
+    var grams: Double = 0.0,
+    var price: Double = 0.0,
+    var calories: Double = 0.0,
     var isSelected: Boolean = false
 ) {
     // Calculate the serving cost based on servings and price
