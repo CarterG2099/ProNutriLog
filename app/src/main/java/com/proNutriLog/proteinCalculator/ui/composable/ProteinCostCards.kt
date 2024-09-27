@@ -112,7 +112,7 @@ fun ProteinCostCard(foodItem: ProteinCostData) {
 
                 // Header Row
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    val headerTexts = listOf("Cost", "Serv", "Grams", "k/Serv", "$/50g", "$/g", "$/Serv", "Cal %")
+                    val headerTexts = listOf("Cost", "Serv", "Grams", "$/50g", "$/g", "$/Serv", "Cal %")
                     headerTexts.forEach {
                         Text(it, fontSize = 12.sp, modifier = Modifier.weight(1f).padding(end = 1.dp))
                     }
@@ -121,9 +121,12 @@ fun ProteinCostCard(foodItem: ProteinCostData) {
                 // Data Row
                 Row(modifier = Modifier.fillMaxWidth()) {
                     val dataTexts = listOf(
-                        "${foodItem.price}", "${foodItem.servings}", "${foodItem.grams}",
-                        "${foodItem.caloriesPerServing}", "${foodItem.costPer50}",
-                        "${foodItem.costPerGram}", "${foodItem.servingCost}",
+                        "${foodItem.price}",
+                        "${foodItem.servings}",
+                        "${foodItem.grams}",
+                        "${foodItem.costPer50}",
+                        "${foodItem.costPerGram}",
+                        "${foodItem.servingCost}",
                         "${foodItem.percentCalFromProtein}"
                     )
                     dataTexts.forEach {
