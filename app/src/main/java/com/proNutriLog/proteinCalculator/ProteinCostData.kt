@@ -19,9 +19,6 @@ data class ProteinCostData(
     val costPerGram: String
         get() = if (grams != 0.0) String.format("%.2f", price / grams) else "Invalid Data"
 
-    val caloriesPerServing: String
-        get() = if (servings != 0.0) String.format("%.2f", (calories / servings)) else "Invalid Data"
-
     val percentCalFromProtein: String
         get() = if (servings != 0.0) String.format("%.2f", ((grams * 4) / calories) * 100) else "Invalid Data"
 
