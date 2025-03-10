@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.pc2.ui.home.HomeFragment"
+        android:name="com.example.proteinCalculator.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_foods"
-        android:name="com.example.pc2.ui.foods.DashboardFragment"
+        android:name="com.example.proteinCalculator.ui.foods.DashboardFragment"
         android:label="Foods"
         tools:layout="@layout/fragment_foods" />
 
     <fragment
         android:id="@+id/navigation_meals"
-        android:name="com.example.pc2.ui.meals.NotificationsFragment"
+        android:name="com.example.proteinCalculator.ui.meals.NotificationsFragment"
         android:label="Meals"
         tools:layout="@layout/fragment_meals" />
 </navigation>
