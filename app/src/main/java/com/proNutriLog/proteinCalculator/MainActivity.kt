@@ -77,14 +77,6 @@ fun BottomNavigationBar(navController: NavHostController) {
                 navController.navigate("foods")
             }
         )
-//        BottomNavigationItem(
-//            icon = { Icon(Icons.Filled.Info, contentDescription = "Meals") },
-//            label = { Text("Meals") },
-//            selected = false, // Update this with actual selected state
-//            onClick = {
-//                navController.navigate("meals")
-//            }
-//        )
     }
 }
 
