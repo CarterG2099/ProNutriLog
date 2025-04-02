@@ -1,10 +1,12 @@
-package com.proNutriLog.proteinCalculator
+package com.proNutriLog.proteinCalculator.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
+import com.proNutriLog.proteinCalculator.Action
+import com.proNutriLog.proteinCalculator.data.model.ProteinCostData
 
 class ProteinCostViewModel : ViewModel() {
 
