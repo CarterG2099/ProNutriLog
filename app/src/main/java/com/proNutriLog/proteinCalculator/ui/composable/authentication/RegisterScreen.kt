@@ -23,12 +23,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 @Composable
 fun RegisterScreen(
     navController: NavController,
+    viewModel: AuthViewModel = viewModel(),
     onRegisterSuccess: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
@@ -80,7 +82,7 @@ fun RegisterScreen(
             onClick = {
                 coroutineScope.launch {
                     try {
-                        SupabaseRepository.register(username, email, password)
+                        viewModel.register(username, email, password)
                         onRegisterSuccess() // Navigate on success
                         Toast.makeText(context, "Registration successful!", Toast.LENGTH_SHORT).show()
                     } catch (e: Exception) {

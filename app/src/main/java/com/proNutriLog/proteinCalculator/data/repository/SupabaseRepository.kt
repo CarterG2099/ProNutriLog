@@ -2,6 +2,7 @@ import com.proNutriLog.proteinCalculator.data.model.User
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -10,7 +11,7 @@ import io.github.jan.supabase.postgrest.postgrest
 object SupabaseRepository {
     lateinit var supabase: SupabaseClient
     private const val SUPABASE_URL = "https://aexmdgmfkazcgkkaxfle.supabase.co"
-    private const val SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFleG1kZ21ma2F6Y2dra2F4ZmxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0MDA4NTEsImV4cCI6MjA1Nzk3Njg1MX0.3Ag8XGO0QxfrYM4ARfIS8cJM4aj5epCB_orwaQb-moY"  // Make sure the key is correct.
+        private const val SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFleG1kZ21ma2F6Y2dra2F4ZmxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0MDA4NTEsImV4cCI6MjA1Nzk3Njg1MX0.3Ag8XGO0QxfrYM4ARfIS8cJM4aj5epCB_orwaQb-moY"
 
     // Initialize the Supabase client
     fun initializeSupabaseClient() {
@@ -24,12 +25,26 @@ object SupabaseRepository {
             }
         }
     }
+    suspend fun login(username: String, pass: String): Boolean {
+        return try {
+            supabase.auth.signInWith(Email) {
+                email = username
+                password = pass
+            }
+            true
+        } catch (e: Exception) {
+            // Handle exception, e.g., network error, bad credentials, etc.
+            println("Login failed: ${e.message}")
+            false
+        }
+    }
 
-    // Login method (Sign-In)
-    suspend fun login(username: String, pass: String): Any {
-        return supabase.auth.signInWith(Email) {
-            email = username
-            password = pass
+    suspend fun googleSignIn(): Boolean {
+        return try {
+            supabase.auth.signInWith(Google)
+            true
+        } catch (e: Exception) {
+            false
         }
     }
 
@@ -44,21 +59,22 @@ object SupabaseRepository {
 
     // Optionally, store the username in a users table
     private suspend fun saveUsername(username: String) {
-        val userTable = supabase.postgrest["users"]  // Adjust the table name if needed
+        val userTable = supabase.postgrest["users"]
         userTable.insert(mapOf("username" to username))
     }
 
-    // Get Current User
-//    fun getCurrentUser(): User? {
-//        val currentUser = supabase.auth.currentUser
-//        return currentUser?.let {
-//            // Map Supabase user data to your local User model
-//            User(email = it.email ?: "")
-//        }
-//    }
+    //Get Current User
+    fun getCurrentUser(): User? {
+        val session = supabase.auth.currentSessionOrNull()
+        return session?.user?.let {
+            User(first_name = it.email ?: "")
+        }
+    }
+
 
     // Sign Out method
     suspend fun signOut() {
         supabase.auth.signOut()
     }
+
 }

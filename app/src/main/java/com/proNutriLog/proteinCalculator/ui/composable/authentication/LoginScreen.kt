@@ -7,16 +7,22 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import com.proNutriLog.proteinCalculator.R
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun LoginScreen(
     navController: NavController,
+    viewModel: AuthViewModel = viewModel(),
     onLoginSuccess: () -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
@@ -25,6 +31,24 @@ fun LoginScreen(
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+// Observe login status and error message from ViewModel
+    val isLoggedIn = viewModel.isLoggedIn
+    val errorMessage = viewModel.errorMessage
+
+    LaunchedEffect(isLoggedIn) {
+        if (isLoggedIn) {
+            onLoginSuccess()
+            navController.navigate("home")  // Or navController.popBackStack() if needed
+        }
+    }
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            viewModel.errorMessage = null
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -72,13 +96,13 @@ fun LoginScreen(
         Button(
             onClick = {
                 coroutineScope.launch {
-                    try {
-                        SupabaseRepository.login(email, password)
-                        onLoginSuccess()
-                        Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(context, "Login failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                    email = email.trim()
+                    password = password.trim()
+                    if (email.isEmpty() || password.isEmpty()) {
+                        Toast.makeText(context, "Please fill in all fields.", Toast.LENGTH_SHORT).show()
+                        return@launch
                     }
+                    viewModel.login(email, password)
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -86,10 +110,41 @@ fun LoginScreen(
             Text("Login")
         }
 
+        GoogleSignInButton(
+            onClick = {
+                coroutineScope.launch {
+                    viewModel.googleSignIn()  // Calls the googleSignIn method in the ViewModel
+                }
+            }
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(onClick = { navController.navigate("register") }) {
             Text("Don't have an account? Register")
         }
+    }
+}
+
+
+@Composable
+fun GoogleSignInButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        )
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.google_logo),
+            contentDescription = "Google Sign-In",
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text("Sign in with Google")
     }
 }

@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.proNutriLog.proteinCalculator.viewmodel.ProteinCostViewModel
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
@@ -29,6 +30,7 @@ fun AppNavHost(navController: NavHostController) {
             composable("login") {
                 LoginScreen(
                     navController = navController,
+                    viewModel = AuthViewModel(),
                     onLoginSuccess = {
                         navController.navigate("home") {
                             popUpTo("login") { inclusive = true }
@@ -47,8 +49,9 @@ fun AppNavHost(navController: NavHostController) {
                 )
             }
             composable("home") { HomeScreen() }
-            composable("foods") { FoodsScreen() }
-            composable("profile") { ProfileScreen() }
+            composable("foods") { FoodsScreen(ProteinCostViewModel()) }
+            composable("shop") { ShopScreen() }
+            composable("profile") { ProfileScreen(navController = navController) }
         }
     }
 }
@@ -81,6 +84,16 @@ fun BottomNavigationBar(navController: NavHostController) {
             }
         )
         NavigationBarItem(
+            icon = { Icon(Icons.Filled.Fastfood, contentDescription = "Shop") },
+            selected = currentRoute == "shop",
+            onClick = {
+                navController.navigate("shop") {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        )
+        NavigationBarItem(
             icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
             selected = currentRoute == "profile",
             onClick = {
@@ -93,7 +106,6 @@ fun BottomNavigationBar(navController: NavHostController) {
     }
 }
 
-// ✅ Function to control BottomNavigationBar visibility
 @Composable
 fun shouldShowBottomBar(navController: NavHostController): Boolean {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
