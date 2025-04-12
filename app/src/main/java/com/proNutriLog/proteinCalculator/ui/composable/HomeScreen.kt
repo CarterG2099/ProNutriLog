@@ -19,8 +19,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.proNutriLog.proteinCalculator.Action
-import com.proNutriLog.proteinCalculator.ProteinCostData
-import com.proNutriLog.proteinCalculator.ProteinCostViewModel
+import com.proNutriLog.proteinCalculator.data.model.ProteinCostData
+import com.proNutriLog.proteinCalculator.viewmodel.ProteinCostViewModel
 import java.util.UUID
 
 

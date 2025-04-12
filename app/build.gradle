@@ -2,19 +2,37 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.1.20'
+//    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+    id("com.google.dagger.hilt.android")
+    id 'org.jetbrains.kotlin.plugin.compose' version '2.1.20'
 }
+
+// Load local.properties
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
+def krogerClientId = localProperties['KROGER_CLIENT_ID'] ?: "test"
+def krogerClientSecret = localProperties['KROGER_CLIENT_SECRET'] ?: "nope"
+
 
 android {
     namespace 'com.proNutriLog.proteinCalculator'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 24
-        targetSdk 34
+        targetSdk 35
         versionCode 2
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "KROGER_CLIENT_ID", "\"${krogerClientId}\""
+        buildConfigField "String", "KROGER_CLIENT_SECRET", "\"${krogerClientSecret}\""
     }
     signingConfigs {
         release {
@@ -23,10 +41,10 @@ android {
             storeFile file(project.property("KEYSTORE_FILE"))
             storePassword project.property("STORE_PASSWORD")
         }
-        debug {
-            // Debug signing config, usually automatically set up by Android Studio
-            storeFile file('path/to/debug.keystore')
-        }
+//        debug {
+//            // Debug signing config, usually automatically set up by Android Studio
+//            storeFile file('path/to/debug.keystore')
+//        }
     }
     buildTypes {
         release {
@@ -36,11 +54,11 @@ android {
         }
 
         // Optionally, you can also add debug build types with specific configurations
-        debug {
-            signingConfig signingConfigs.debug
-            applicationIdSuffix ".debug"
-            debuggable true
-        }
+//        debug {
+//            signingConfig signingConfigs.debug
+//            applicationIdSuffix ".debug"
+//            debuggable true
+//        }
     }
 
     // Define product flavors for different environments
@@ -50,66 +68,100 @@ android {
             dimension "version"
             applicationId "com.proNutriLog.proteinCalculator"
             versionNameSuffix "-prod"
+            buildConfigField "String", "KROGER_CLIENT_ID", "\"${krogerClientId}\""
+            buildConfigField "String", "KROGER_CLIENT_SECRET", "\"${krogerClientSecret}\""
         }
 
         dev {
             dimension "version"
             applicationId "com.proNutriLog.proteinCalculator.dev"
             versionNameSuffix "-dev"
+            buildConfigField "String", "KROGER_CLIENT_ID", "\"${krogerClientId}\""
+            buildConfigField "String", "KROGER_CLIENT_SECRET", "\"${krogerClientSecret}\""
         }
     }
 
+// App build.gradle
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
+        buildConfig true
 //        dataBinding true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.8' // Use the latest stable version available
+        kotlinCompilerExtensionVersion '1.5.15'
+    }
+    kapt {
+        correctErrorTypes true
     }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.core:core-ktx:1.16.0'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.5'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.9'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.8.9'
+
+    //Supabase
+    implementation platform("io.github.jan-tennert.supabase:bom:3.1.3")
+    implementation 'io.github.jan-tennert.supabase:postgrest-kt'
+    implementation 'io.github.jan-tennert.supabase:auth-kt'
+    implementation 'io.github.jan-tennert.supabase:realtime-kt'
+    implementation "io.ktor:ktor-client-android:3.1.1"
 
     //Firebase
-    implementation platform('com.google.firebase:firebase-bom:33.3.0')
+    implementation platform('com.google.firebase:firebase-bom:33.12.0')
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-firestore:25.1.0' // Firestore library (example)
+    implementation 'com.google.firebase:firebase-firestore:25.1.3' // Firestore library (example)
 
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    // Hilt for DI
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+
+    //
 
     // Jetpack Compose dependencies
-    implementation 'androidx.compose.ui:ui:1.7.1'
-    implementation 'androidx.compose.material:material:1.7.1'
-    implementation 'androidx.compose.ui:ui-tooling-preview:1.7.1'
-    implementation 'androidx.compose.material3:material3-android:1.3.0'
-    implementation 'androidx.navigation:navigation-compose:2.8.0'
-    implementation 'androidx.compose.runtime:runtime-livedata:1.7.1'
-    debugImplementation 'androidx.compose.ui:ui-tooling:1.7.1'
-    implementation 'androidx.activity:activity-compose:1.9.2'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.5'
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
-    implementation "androidx.compose.foundation:foundation:1.7.1"
-    implementation "androidx.compose.material:material-icons-extended:1.7.1"
-
-
+    implementation platform('androidx.compose:compose-bom:2025.04.00') // Use latest stable
+    implementation 'androidx.compose.material3:material3-android:1.3.2'
+    implementation "androidx.compose.material:material-icons-extended:1.7.8"
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.material:material'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.navigation:navigation-compose:2.8.9'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.7.8'
+    implementation 'com.google.firebase:firebase-firestore-ktx:25.1.3'
+    implementation 'androidx.test.espresso:espresso-core:3.6.1'
+    debugImplementation 'androidx.compose.ui:ui-tooling:1.7.8'
+    implementation 'androidx.activity:activity-compose:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.1.1"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1'
+    implementation 'com.google.code.gson:gson:2.11.0'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }

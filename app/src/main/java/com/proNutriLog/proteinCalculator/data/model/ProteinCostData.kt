@@ -1,4 +1,4 @@
-package com.proNutriLog.proteinCalculator
+package com.proNutriLog.proteinCalculator.data.model
 
 data class ProteinCostData(
     var id: String = "",

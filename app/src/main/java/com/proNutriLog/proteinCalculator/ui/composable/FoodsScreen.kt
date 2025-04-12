@@ -17,12 +17,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.proNutriLog.proteinCalculator.Action
-import com.proNutriLog.proteinCalculator.ProteinCostData
-import com.proNutriLog.proteinCalculator.ProteinCostViewModel
+import com.proNutriLog.proteinCalculator.data.model.ProteinCostData
+import com.proNutriLog.proteinCalculator.viewmodel.ProteinCostViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
