@@ -17,8 +17,6 @@ class ProteinCostViewModel : ViewModel() {
     val proteinCostLiveData: LiveData<List<ProteinCostData>> get() = _proteinCostLiveData
 
     private val collectionRef = db.collection("proteinCostData")
-    private val krogerRepo = KrogerRepository(RetrofitInstance.api)
-
 
     // Function to save or update food items in Firestore
     fun updateFoodItem(foodItem: ProteinCostData, action: Action) {
@@ -100,10 +98,6 @@ class ProteinCostViewModel : ViewModel() {
         }
 
         _proteinCostLiveData.value = sortedList
-    }
-
-    suspend fun searchKroger(query: String): List<ProteinCostData> {
-        return krogerRepo.searchItems(query)
     }
 
 }

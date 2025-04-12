@@ -1,6 +1,10 @@
 package com.proNutriLog.proteinCalculator.data.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class User(
+    val id: String = "",
     val first_name: String = "",
     val last_name: String = "",
     val display_name: String = "",

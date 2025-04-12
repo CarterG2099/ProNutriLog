@@ -1,3 +1,5 @@
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,24 +11,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.proNutriLog.proteinCalculator.data.model.ProteinCostData
-import com.proNutriLog.proteinCalculator.viewmodel.ProteinCostViewModel
+import com.proNutriLog.proteinCalculator.viewmodel.KrogerViewModel
 import kotlinx.coroutines.launch
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShopScreen(viewModel: ProteinCostViewModel = viewModel()) {
+fun ShopScreen(viewModel: KrogerViewModel = hiltViewModel()) {
     var searchText by remember { mutableStateOf("") }
     var searchResults by remember { mutableStateOf<List<ProteinCostData>>(emptyList()) }
     val coroutineScope = rememberCoroutineScope()
+    val response by viewModel.products.observeAsState()
+
+    // Update searchResults when response changes
+    LaunchedEffect(response) {
+        response?.let {
+            searchResults = it.data.map { product ->
+                ProteinCostData(
+                    foodSource = product.description ?: "Unknown",
+                    price = product.items?.firstOrNull()?.price?.regular ?: 0.0,
+                )
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -35,8 +53,9 @@ fun ShopScreen(viewModel: ProteinCostViewModel = viewModel()) {
                 onQueryChange = { searchText = it },
                 onSearch = {
                     coroutineScope.launch {
-                        val results = viewModel.searchKroger(searchText)
-                        searchResults = results
+                        val results = viewModel.search(searchText, "01400943")
+                        //Print the results
+                        println(results)
                     }
                 },
                 active = false,
@@ -65,13 +84,14 @@ fun ShopScreen(viewModel: ProteinCostViewModel = viewModel()) {
                 items(searchResults) { item ->
                     ProteinCostItem(
                         foodItem = item,
-                        onDelete = {}, // if needed
-                        onEdit = {} // if needed
+                        onDelete = {},
+                        onEdit = {}
                     )
                 }
             }
         }
     }
 }
+
 
 

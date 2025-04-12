@@ -71,6 +71,23 @@ fun ProfileScreen(
                 Button(onClick = { isEditDialogVisible = true }) {
                     Text("Edit Profile")
                 }
+
+                // Sign Out Button
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = {
+                        authViewModel.signOut()
+                        navController.navigate("login") {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true // Prevents multiple copies of login on back stack
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Sign Out")
+                }
             }
         }
 
@@ -101,20 +118,7 @@ fun ProfileScreen(
                 }
             )
         }
-        Button(
-            onClick = {
-                authViewModel.signOut()
-                navController.navigate("login") {
-                    popUpTo(navController.graph.startDestinationId) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true // Prevents multiple copies of login on back stack
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Sign Out")
-        }
+
 
     }
 }

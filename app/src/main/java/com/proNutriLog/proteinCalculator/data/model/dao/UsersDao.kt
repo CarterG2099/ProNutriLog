@@ -1,31 +1,41 @@
-// UsersDao.kt
-package com.proNutriLog.proteinCalculator.data
-
 import com.proNutriLog.proteinCalculator.data.model.User
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.from
 
-
-class UsersDao() {
+class UsersDao {
 
     suspend fun insertUser(user: User) {
-        SupabaseRepository.supabase.postgrest["users"].insert(user)
+        try {
+            SupabaseRepository.supabase.postgrest["users"].insert(user)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    suspend fun getUser(userId: String): User? {
-        val result = SupabaseRepository.supabase.postgrest.from("users")
-            .select {
-                filter {
-                    eq("user_id", userId)
-                }
-                single()
-            }
+    suspend fun getUser(userId: String?): User {
+        // If userId is null, get the current user ID from SupabaseRepository
+        val id = userId ?: SupabaseRepository.getCurrentUser()
 
-        val data = result.data as? Map<String, Any?> ?: return null
-        println("getUser: $data")
-        return User(
-            first_name = data["first_name"] as? String ?: "",
-            last_name = data["last_name"] as? String ?: ""
-        )
+        if (id == null) {
+            return User("null", "null", "null") // Return null if no userId is available
+        }
+
+        return try {
+            val response = SupabaseRepository.getUserById(id)
+            println("Response: $response")
+            val user = response.decodeList<User>().firstOrNull()
+            println("UsersDAO user: $user")
+            user ?: User("unknown", "unknown", "unknown") // Return null if user is not found
+        } catch (e: Exception) {
+            e.printStackTrace()
+            User("error", "error", "error") // Return null if something goes wrong
+        }
+    }
+
+    suspend fun updateUser(user: User) {
+        try {
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

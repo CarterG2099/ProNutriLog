@@ -32,14 +32,14 @@ fun LoginScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-// Observe login status and error message from ViewModel
+    // Observe login status and error message from ViewModel
     val isLoggedIn = viewModel.isLoggedIn
     val errorMessage = viewModel.errorMessage
 
     LaunchedEffect(isLoggedIn) {
         if (isLoggedIn) {
             onLoginSuccess()
-            navController.navigate("home")  // Or navController.popBackStack() if needed
+            navController.navigate("home")
         }
     }
 

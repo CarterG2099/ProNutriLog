@@ -7,6 +7,8 @@ import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.result.PostgrestResult
 
 object SupabaseRepository {
     lateinit var supabase: SupabaseClient
@@ -64,13 +66,27 @@ object SupabaseRepository {
     }
 
     //Get Current User
-    fun getCurrentUser(): User? {
+    fun getCurrentUser(): String? {
         val session = supabase.auth.currentSessionOrNull()
-        return session?.user?.let {
-            User(first_name = it.email ?: "")
-        }
+        return session?.user?.id
     }
 
+    // Get User by ID
+    suspend fun getUserById(userId: String): PostgrestResult {
+        println("Fetching user with ID: $userId")
+        try {
+            val response = supabase.postgrest["users"].select{
+                filter {
+                    eq("id", userId)
+                }
+            }
+            println("Raw JSON result: ${response.headers} \n ${response.data} ")
+            return response
+//            response.decodeSingleOrNull<User>()
+        } catch (e: Exception) {
+            throw Exception("Failed to fetch user: ${e.message}")
+        }
+    }
 
     // Sign Out method
     suspend fun signOut() {

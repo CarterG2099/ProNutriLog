@@ -1,28 +1,32 @@
 package com.proNutriLog.proteinCalculator.data.repository
 
+import android.os.Build
 import android.util.Log
-import com.proNutriLog.proteinCalculator.data.model.ProteinCostData
+import androidx.annotation.RequiresApi
+import com.proNutriLog.proteinCalculator.data.model.KrogerProductResponse
 import com.proNutriLog.proteinCalculator.data.remote.KrogerApiService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class KrogerRepository(private val apiService: KrogerApiService) {
+class KrogerRepository @Inject constructor(
+    private val apiService: KrogerApiService,
+    private val tokenManager: TokenManager
+) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun searchProducts(term: String, locationId: String): KrogerProductResponse? {
+        val token = tokenManager.getValidProductToken()
+        val response = apiService.searchProducts(
+            token = "Bearer $token",
+            term = term,
+            locationId = locationId
+        )
 
-    suspend fun searchItems(query: String): List<ProteinCostData> = withContext(Dispatchers.IO) {
-        try {
-            val response = apiService.searchItems(query)
-
-            if (response.isSuccessful) {
-                val body = response.body()
-                // TODO: Map actual response to your ProteinCostData list
-                Log.d("KrogerRepo", "Response: $body")
-                return@withContext emptyList() // Replace with mapped result
-            } else {
-                Log.e("KrogerRepo", "Failed: ${response.errorBody()?.string()}")
-            }
-        } catch (e: Exception) {
-            Log.e("KrogerRepo", "Exception: ${e.message}", e)
+        return if (response.isSuccessful) {
+            response.body()
+        } else {
+            Log.e("KrogerRepository", "Product search failed: ${response.errorBody()?.string()}")
+            null
         }
-        return@withContext emptyList()
     }
 }
+
+
